@@ -34,11 +34,6 @@ class SaltVideoPlayer: StandardGSYVideoPlayer {
         super.touchDoubleUp(e)
     }
 
-    override fun setProgressAndTime(progress: Long, secProgress: Long, currentTime: Long, totalTime: Long, forceChange: Boolean) {
-        super.setProgressAndTime(progress, secProgress, currentTime, totalTime, forceChange)
-        // onSetProgressAndTime(progress, secProgress, currentTime, totalTime, forceChange)
-    }
-
     override fun resolveUIState(state: Int) {
         super.resolveUIState(state)
         when(state) {
@@ -48,8 +43,8 @@ class SaltVideoPlayer: StandardGSYVideoPlayer {
         }
     }
 
-    override fun onPrepared() {
-        super.onPrepared()
+    override fun onVideoSizeChanged() {
+        super.onVideoSizeChanged()
         onVideoSizeChangeListener.invoke(currentVideoWidth, currentVideoHeight)
     }
 

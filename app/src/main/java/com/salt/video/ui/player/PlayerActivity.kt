@@ -20,6 +20,7 @@ import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.blankj.utilcode.util.ScreenUtils
+import com.dso.ext.toTimeFormat
 import com.salt.video.R
 import com.salt.video.core.PlayerState
 import com.salt.video.core.SaltVideoPlayer
@@ -137,6 +138,8 @@ class PlayerActivity : AppCompatActivity() {
             saltVideoPlayer.onSetProgressAndTime = { progress, secProgress, currentTime, totalTime ->
                 seekBar.max = totalTime.toInt()
                 seekBar.progress = currentTime.toInt()
+                tvProgress.text = currentTime.toTimeFormat()
+                tvDuration.text = totalTime.toTimeFormat()
             }
 
             blurViewTitleBar.visibility = View.INVISIBLE
@@ -146,7 +149,8 @@ class PlayerActivity : AppCompatActivity() {
                 if (blurViewBottomBar.visibility == View.VISIBLE) blurViewBottomBar.visibility = View.INVISIBLE else blurViewBottomBar.visibility = View.VISIBLE
             }
 
-            seekBar.thumb.colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
+            seekBar.thumb = getDrawable(R.drawable.ic_orange)
+            // seekBar.thumb.colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC)
             seekBar.progressDrawable.colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
             // 歌曲进度条变化的监听
             seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {

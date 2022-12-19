@@ -42,6 +42,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <com.salt.video.ui.widget.ProtectView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clTitleBar"
             android:layout_width="match_parent"
@@ -88,6 +92,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <com.salt.video.ui.widget.ProtectView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clBottomBar"
             android:layout_width="match_parent"
@@ -117,23 +125,46 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
+            <TextView
+                android:id="@+id/tvProgress"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/seekBar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/seekBar"
+                tools:text="12:00" />
+
             <SeekBar
                 android:id="@+id/seekBar"
                 android:layout_width="0dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:alpha="0.72"
                 android:maxHeight="2dp"
                 android:minHeight="4dp"
                 android:progressDrawable="@drawable/background_seek_bar_music"
                 android:splitTrack="false"
                 android:thumb="@drawable/background_seek_bar_thumb"
                 android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvDuration"
+                app:layout_constraintStart_toEndOf="@+id/tvProgress"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDuration"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/seekBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/seekBar"
+                tools:text="12:00" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
