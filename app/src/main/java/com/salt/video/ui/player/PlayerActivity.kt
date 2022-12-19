@@ -1,7 +1,12 @@
 package com.salt.video.ui.player
 
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,30 +16,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.blankj.utilcode.util.ScreenUtils
 import com.salt.video.R
+import com.salt.video.core.PlayerState
 import com.salt.video.core.SaltVideoPlayer
+import com.salt.video.databinding.ActivityPlayerBinding
+import com.shuyu.gsyvideoplayer.player.PlayerFactory
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import eightbitlab.com.blurview.BlurView
-import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.coroutines.launch
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 
 
 class PlayerActivity : AppCompatActivity() {
 
-    private var showUI = false
-
-    private lateinit var saltVideoPlayer: SaltVideoPlayer
+    private lateinit var binding: ActivityPlayerBinding
 
     private lateinit var ivShotPic: ImageView
 
     private val shotPicHandler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             if (msg.what == HANDLER_MSG_SHOT_PIC) {
-                if (saltVideoPlayer.currentVideoHeight > 0 && saltVideoPlayer.currentVideoWidth > 0) {
-                    saltVideoPlayer.taskShotPic {
+                if (binding.saltVideoPlayer.currentVideoHeight > 0 && binding.saltVideoPlayer.currentVideoWidth > 0) {
+                    binding.saltVideoPlayer.taskShotPic {
                         ivShotPic.setImageBitmap(it)
                         // Log.d(TAG, "shot")
                     }
@@ -48,12 +55,11 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        ScreenUtils.isScreenLock()
-
-        setContentView(R.layout.activity_player)
-        saltVideoPlayer = findViewById<SaltVideoPlayer>(R.id.saltVideoPlayer)
+        // 使用 Exo2 内核
+        PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
 
         val radius = 25f
 
@@ -69,9 +75,8 @@ class PlayerActivity : AppCompatActivity() {
         val flShot = findViewById<FrameLayout>(R.id.flShot)
         ivShotPic = findViewById<ImageView>(R.id.ivShotPic)
 
-        val clTitleBar = findViewById<ConstraintLayout>(R.id.clTitleBar)
-        val blurView = findViewById<BlurView>(R.id.blurView)
-        blurView.setupWith(flShot, RenderScriptBlur(this)) // or RenderEffectBlur
+        val blurViewTitleBar = findViewById<BlurView>(R.id.blurViewTitleBar)
+        blurViewTitleBar.setupWith(flShot, RenderScriptBlur(this)) // or RenderEffectBlur
             .setFrameClearDrawable(windowBackground) // Optional
             .setBlurRadius(radius)
 
@@ -81,31 +86,95 @@ class PlayerActivity : AppCompatActivity() {
             .setFrameClearDrawable(windowBackground) // Optional
             .setBlurRadius(radius)
 
-
         val url = intent.getStringExtra(EXTRA_URL)
+        val title = intent.getStringExtra(EXTRA_TITLE)
+        if (url != null && title != null) {
+            binding.saltVideoPlayer.setUp(url, false, "")
+            binding.saltVideoPlayer.startPlayLogic()
+            binding.tvTitle.text = title
+        }
 
-        saltVideoPlayer.setUp(url, false, "")
-        saltVideoPlayer.onVideoSizeChangeListener = { width, height ->
-            Log.d(TAG, "video w = $width, h = $height")
-            if (width > height) {
-                this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE)
-            } else {
-                this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT)
+        initView()
+    }
+
+    private fun initView() {
+        with(binding) {
+            ivBack.setOnClickListener {
+                finish()
             }
-            shotPicHandler.sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
-        }
 
-        clTitleBar.visibility = View.INVISIBLE
-        clBottomBar.visibility = View.INVISIBLE
-        saltVideoPlayer.onClickUiToggle = {
-            if (clTitleBar.visibility == View.VISIBLE) clTitleBar.visibility = View.INVISIBLE else clTitleBar.visibility = View.VISIBLE
-            if (clBottomBar.visibility == View.VISIBLE) clBottomBar.visibility = View.INVISIBLE else clBottomBar.visibility = View.VISIBLE
-        }
-//        saltVideoPlayer.isRotateViewAuto = true
-//        saltVideoPlayer.isAutoFullWithSize = true
-//        saltVideoPlayer.isOnlyRotateLand = false
+            ivPlayerState.setOnClickListener {
+                if (saltVideoPlayer.gsyVideoManager.isPlaying) {
+                    saltVideoPlayer.onVideoPause()
+                } else {
+                    saltVideoPlayer.onVideoResume()
+                }
+            }
 
-        saltVideoPlayer.startPlayLogic()
+            ivRotation.setOnClickListener {
+                if (this@PlayerActivity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT) {
+                    this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE)
+                } else {
+                    this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT)
+                }
+            }
+
+            saltVideoPlayer.onPlayerStateChange = {
+                when (it) {
+                    PlayerState.RESUME -> ivPlayerState.setImageResource(R.drawable.ic_pause)
+                    PlayerState.PAUSE -> ivPlayerState.setImageResource(R.drawable.ic_play)
+                }
+            }
+            saltVideoPlayer.onVideoSizeChangeListener = { width, height ->
+                Log.d(TAG, "video w = $width, h = $height")
+                if (width > height) {
+                    this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE)
+                } else {
+                    this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT)
+                }
+                shotPicHandler.sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
+            }
+            saltVideoPlayer.onSetProgressAndTime = { progress, secProgress, currentTime, totalTime ->
+                seekBar.max = totalTime.toInt()
+                seekBar.progress = currentTime.toInt()
+            }
+
+            blurViewTitleBar.visibility = View.INVISIBLE
+            blurViewBottomBar.visibility = View.INVISIBLE
+            saltVideoPlayer.onClickUiToggle = {
+                if (blurViewTitleBar.visibility == View.VISIBLE) blurViewTitleBar.visibility = View.INVISIBLE else blurViewTitleBar.visibility = View.VISIBLE
+                if (blurViewBottomBar.visibility == View.VISIBLE) blurViewBottomBar.visibility = View.INVISIBLE else blurViewBottomBar.visibility = View.VISIBLE
+            }
+
+            seekBar.thumb.colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
+            seekBar.progressDrawable.colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
+            // 歌曲进度条变化的监听
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+
+                var pro = 0
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    // 判断是否为用户
+                    if (fromUser) {
+                        pro = progress
+                        // binding.tvProgress.text = progress.toLong().toTimeFormat()
+                    }
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    // playerViewModel.seeking = true
+                    pro = seekBar.progress
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    // playerViewModel.seeking = false
+//                playerViewModel.setProgress(pro)
+//                playerViewModel.refreshProgress()
+                    saltVideoPlayer.seekTo(pro.toLong())
+                }
+
+            })
+        }
     }
 
     override fun onResume() {
@@ -135,7 +204,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        saltVideoPlayer.currentPlayer.release()
+        binding.saltVideoPlayer.currentPlayer.release()
     }
 
     private fun hideNavigationBar() {
@@ -149,9 +218,17 @@ class PlayerActivity : AppCompatActivity() {
         private const val TAG = "PlayerActivity"
 
         const val EXTRA_URL = "extra_url"
+        const val EXTRA_TITLE = "extra_title"
 
         private const val HANDLER_MSG_SHOT_PIC = 1001
         private const val HANDLER_MSG_SHOT_PIC_DELAY = 42L
+
+        fun start(activity: Activity, url: String, title: String) {
+            val intent = Intent(activity, PlayerActivity::class.java)
+            intent.putExtra(EXTRA_URL, url)
+            intent.putExtra(EXTRA_TITLE, title)
+            activity.startActivity(intent)
+        }
     }
 
 }

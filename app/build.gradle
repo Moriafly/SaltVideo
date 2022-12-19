@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+def gitCommits = Integer.parseInt('git rev-list HEAD --count'.execute().text.trim())
+
 android {
     namespace 'com.salt.video'
     compileSdk 33
@@ -11,22 +13,38 @@ android {
         applicationId "com.salt.video"
         minSdk 23
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode gitCommits
+        versionName "0.1.0-build"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters "arm64-v8a"
+        }
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        android.applicationVariants.all { variant ->
+            variant.outputs.all {
+                outputFileName = "SaltVideo-${defaultConfig.versionName}-${defaultConfig.versionCode}.apk"
+            }
+        }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -51,4 +69,9 @@ dependencies {
     implementation 'com.github.DylanCaiCoding:ActivityResultLauncher:1.1.2'
     implementation('com.blankj:utilcodex:1.31.1')
     implementation 'com.github.Dimezis:BlurView:version-2.0.3'
+
+    def dialogx_version = "0.0.47.beta13"
+    implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
+    implementation "com.github.kongzue.DialogX:DialogXMIUIStyle:${dialogx_version}"
+    implementation "com.github.kongzue.DialogX:DialogXMaterialYou:${dialogx_version}"
 }

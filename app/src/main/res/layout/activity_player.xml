@@ -28,49 +28,117 @@
         android:layout_height="match_parent"
         tools:visibility="gone" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clTitleBar"
+    <com.salt.video.ui.widget.ProtectView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurViewTitleBar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        app:blurOverlayColor="#8C000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.salt.video.ui.widget.ProtectView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clTitleBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="52dp"
+            android:paddingTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <eightbitlab.com.blurview.BlurView
-            android:id="@+id/blurView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:blurOverlayColor="#8C000000">
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="12dp"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-            <!--Any child View here, TabLayout for example. This View will NOT be blurred -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/ivBack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ivBack"
+                app:layout_constraintTop_toTopOf="@id/ivBack" />
 
-        </eightbitlab.com.blurview.BlurView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </eightbitlab.com.blurview.BlurView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clBottomBar"
+
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurViewBottomBar"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="72dp"
+        app:blurOverlayColor="#8C000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <eightbitlab.com.blurview.BlurView
-            android:id="@+id/blurViewBottomBar"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clBottomBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:blurOverlayColor="#8C000000">
+            android:paddingBottom="4dp">
 
-            <!--Any child View here, TabLayout for example. This View will NOT be blurred -->
 
-        </eightbitlab.com.blurview.BlurView>
+            <ImageView
+                android:id="@+id/ivPlayerState"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="12dp"
+                android:src="@drawable/ic_pause"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/ivRotation"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="12dp"
+                android:src="@drawable/ic_rotate_screen"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:alpha="0.72"
+                android:maxHeight="2dp"
+                android:minHeight="4dp"
+                android:progressDrawable="@drawable/background_seek_bar_music"
+                android:splitTrack="false"
+                android:thumb="@drawable/background_seek_bar_thumb"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </eightbitlab.com.blurview.BlurView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
