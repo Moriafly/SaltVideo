@@ -20,18 +20,14 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.blankj.utilcode.util.ScreenUtils
 import com.dso.ext.toTimeFormat
 import com.salt.video.R
 import com.salt.video.core.PlayerState
-import com.salt.video.core.SaltVideoPlayer
 import com.salt.video.databinding.ActivityPlayerBinding
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
-
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -88,13 +84,27 @@ class PlayerActivity : AppCompatActivity() {
             .setFrameClearDrawable(windowBackground) // Optional
             .setBlurRadius(radius)
 
-        val url = intent.getStringExtra(EXTRA_URL)
-        val title = intent.getStringExtra(EXTRA_TITLE)
-        if (url != null && title != null) {
-            binding.saltVideoPlayer.setUp(url, false, "")
-            binding.saltVideoPlayer.startPlayLogic()
-            binding.tvTitle.text = title
+        val data = intent.data
+        Log.d(TAG, "intent.data = $data")
+        if (data == null) {
+            val url = intent.getStringExtra(EXTRA_URL)
+            val title = intent.getStringExtra(EXTRA_TITLE)
+            if (url != null && title != null) {
+                binding.saltVideoPlayer.setUp(url, false, "")
+                binding.saltVideoPlayer.startPlayLogic()
+                binding.tvTitle.text = title
+            }
+        } else {
+            val url = data.toString()
+            val title = url
+            if (url != null && title != null) {
+                binding.saltVideoPlayer.setUp(url, false, "")
+                binding.saltVideoPlayer.startPlayLogic()
+                binding.tvTitle.text = title
+            }
         }
+
+
 
         initView()
     }
