@@ -115,6 +115,16 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
+                android:id="@+id/ivPictureInPicture"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="12dp"
+                android:src="@drawable/ic_picture_in_picture"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivRotation" />
+
+            <ImageView
                 android:id="@+id/ivRotation"
                 android:layout_width="48dp"
                 android:layout_height="48dp"

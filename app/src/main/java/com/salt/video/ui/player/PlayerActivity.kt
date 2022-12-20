@@ -7,6 +7,7 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -112,6 +113,12 @@ class PlayerActivity : AppCompatActivity() {
                 }
             }
 
+            ivPictureInPicture.setOnClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    this@PlayerActivity.enterPictureInPictureMode()
+                }
+            }
+
             ivRotation.setOnClickListener {
                 if (this@PlayerActivity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT) {
                     this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE)
@@ -142,11 +149,13 @@ class PlayerActivity : AppCompatActivity() {
                 tvDuration.text = totalTime.toTimeFormat()
             }
 
-            blurViewTitleBar.visibility = View.INVISIBLE
-            blurViewBottomBar.visibility = View.INVISIBLE
+            hideTitleAndBottomBar()
             saltVideoPlayer.onClickUiToggle = {
-                if (blurViewTitleBar.visibility == View.VISIBLE) blurViewTitleBar.visibility = View.INVISIBLE else blurViewTitleBar.visibility = View.VISIBLE
-                if (blurViewBottomBar.visibility == View.VISIBLE) blurViewBottomBar.visibility = View.INVISIBLE else blurViewBottomBar.visibility = View.VISIBLE
+                if (titleAndBottomBarVisibility) {
+                    hideTitleAndBottomBar()
+                } else {
+                    showTitleAndBottomBar()
+                }
             }
 
             seekBar.thumb = getDrawable(R.drawable.ic_orange)
@@ -178,6 +187,35 @@ class PlayerActivity : AppCompatActivity() {
                 }
 
             })
+        }
+    }
+
+    private var titleAndBottomBarVisibility = false
+
+    private fun hideTitleAndBottomBar() {
+        binding.blurViewTitleBar.visibility = View.INVISIBLE
+        binding.blurViewBottomBar.visibility = View.INVISIBLE
+        titleAndBottomBarVisibility = false
+    }
+
+    private fun showTitleAndBottomBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (isInPictureInPictureMode) {
+                return
+            }
+        }
+        binding.blurViewTitleBar.visibility = View.VISIBLE
+        binding.blurViewBottomBar.visibility = View.VISIBLE
+        titleAndBottomBarVisibility = true
+    }
+
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean,
+                                               newConfig: Configuration) {
+        if (isInPictureInPictureMode) {
+            hideTitleAndBottomBar()
+            // Hide the full-screen UI (controls, etc.) while in picture-in-picture mode.
+        } else {
+            // Restore the full-screen UI.
         }
     }
 
