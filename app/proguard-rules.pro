@@ -20,6 +20,24 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# 一般 5 就行
+-optimizationpasses 10
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+-verbose
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.Intent
+-keep public class * extends android.content.ContextWrapper
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
+
+# GSYVideoPlayer
 -keep class com.shuyu.gsyvideoplayer.video.** { *; }
 -dontwarn com.shuyu.gsyvideoplayer.video.**
 -keep class com.shuyu.gsyvideoplayer.video.base.** { *; }
@@ -39,3 +57,6 @@
     public <init>(android.content.Context, android.util.AttributeSet);
     public <init>(android.content.Context, android.util.AttributeSet, int);
 }
+
+# 将所有混淆的类移动到 androidx.core
+-repackageclasses androidx.core
