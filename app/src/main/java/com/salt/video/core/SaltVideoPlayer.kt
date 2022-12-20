@@ -22,9 +22,10 @@ class SaltVideoPlayer: StandardGSYVideoPlayer {
 
     var onPlayerStateChange: (PlayerState) -> Unit = {}
 
-    var onSetProgressAndTime: (progress: Long, secProgress: Long, currentTime: Long, totalTime: Long) -> Unit = {
-            progress, secProgress, currentTime, totalTime ->
-    }
+    var onSetProgressAndTime: (currentTime: Long, totalTime: Long) -> Unit = { _, _ -> }
+
+    /** 是否正在使用手势拖动 */
+    private var isDragSeeking = false
 
     override fun getLayoutId(): Int {
         return R.layout.layout_salt_video_player
@@ -32,6 +33,18 @@ class SaltVideoPlayer: StandardGSYVideoPlayer {
 
     override fun touchDoubleUp(e: MotionEvent?) {
         super.touchDoubleUp(e)
+    }
+
+    override fun showProgressDialog(deltaX: Float, seekTime: String?, seekTimePosition: Long, totalTime: String?, totalTimeDuration: Long) {
+        super.showProgressDialog(deltaX, seekTime, seekTimePosition, totalTime, totalTimeDuration)
+        isDragSeeking = true
+        onSetProgressAndTime(seekTimePosition, totalTimeDuration)
+        Log.d(TAG, "showProgressDialog seekTime = $seekTime, seekTimePosition = $seekTimePosition, totalTime = $totalTime, totalTimeDuration = $totalTimeDuration")
+    }
+
+    override fun dismissProgressDialog() {
+        super.dismissProgressDialog()
+        isDragSeeking = false
     }
 
     override fun resolveUIState(state: Int) {
@@ -61,7 +74,9 @@ class SaltVideoPlayer: StandardGSYVideoPlayer {
     init {
         setGSYVideoProgressListener { progress, secProgress, currentPosition, duration ->
             Log.d(TAG, "p: $progress, sp: $secProgress, c: $currentPosition, d: $duration")
-            onSetProgressAndTime(progress, secProgress, currentPosition, duration)
+            if (!isDragSeeking) {
+                onSetProgressAndTime(currentPosition, duration)
+            }
         }
         isLooping = true
         isReleaseWhenLossAudio = false

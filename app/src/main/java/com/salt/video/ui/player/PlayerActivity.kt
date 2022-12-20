@@ -142,7 +142,7 @@ class PlayerActivity : AppCompatActivity() {
                 }
                 shotPicHandler.sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
             }
-            saltVideoPlayer.onSetProgressAndTime = { progress, secProgress, currentTime, totalTime ->
+            saltVideoPlayer.onSetProgressAndTime = { currentTime, totalTime ->
                 seekBar.max = totalTime.toInt()
                 seekBar.progress = currentTime.toInt()
                 tvProgress.text = currentTime.toTimeFormat()
