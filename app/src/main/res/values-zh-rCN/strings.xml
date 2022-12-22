@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SaltVideo</string>
-    <string name="home">首页</string>
+    <string name="app_name">椒盐视频</string>
+    <string name="local">本地</string>
+    <string name="cloud">云端</string>
+    <string name="my">我的</string>
 </resources>

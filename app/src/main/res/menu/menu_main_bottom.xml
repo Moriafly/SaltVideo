@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/itemHome"
-        android:icon="@drawable/ic_video"
-        android:title="首页" />
 
     <item
-        android:id="@+id/itemFile"
+        android:id="@+id/itemLocal"
         android:icon="@drawable/ic_movies_folder"
-        android:title="文件" />
+        android:title="@string/local" />
+
+    <item
+        android:id="@+id/itemCloudDisk"
+        android:icon="@drawable/ic_cloud"
+        android:title="@string/cloud" />
 
     <item
         android:id="@+id/itemMy"
         android:icon="@drawable/ic_video"
-        android:title="我的" />
+        android:title="@string/my" />
 
 </menu>

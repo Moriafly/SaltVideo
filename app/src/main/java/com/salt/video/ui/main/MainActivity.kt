@@ -1,11 +1,6 @@
 package com.salt.video.ui.main
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
@@ -15,13 +10,13 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.dylanc.activityresult.launcher.OpenDocumentLauncher
 import com.dylanc.activityresult.launcher.OpenDocumentTreeLauncher
-import com.kongzue.dialogx.dialogs.BottomMenu
 import com.kongzue.dialogx.dialogs.InputDialog
 import com.kongzue.dialogx.dialogs.PopMenu
 import com.salt.video.R
 import com.salt.video.databinding.ActivityMainBinding
-import com.salt.video.databinding.ActivityPlayerBinding
-import com.salt.video.ui.main.home.HomeFragment
+import com.salt.video.ui.main.cloud.CloudFragment
+import com.salt.video.ui.main.local.LocalFragment
+import com.salt.video.ui.main.my.MyFragment
 import com.salt.video.ui.player.PlayerActivity
 
 class MainActivity : AppCompatActivity() {
@@ -48,13 +43,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.ivAdd.setOnClickListener {
-            PopMenu.show(
-                listOf(
-                    "本地视频",
-                    "本地音乐",
-                    "网络音视频"
+            PopMenu.build()
+                .setMenuList(
+                    listOf(
+                        "单个本地视频",
+                        "单个本地音乐",
+                        "单个网络音视频",
+//                        "本地音视频文件夹",
+//                        "WebDAV 服务器"
+                    )
                 )
-            )
                 .setOnMenuItemClickListener { dialog, text, index ->
                     when (index) {
                         0 -> openDocumentLauncher("video/*")
@@ -63,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     return@setOnMenuItemClickListener false
                 }
-
+                .show()
         }
 
         initView()
@@ -78,9 +76,9 @@ class MainActivity : AppCompatActivity() {
 
                 override fun getItem(position: Int): Fragment {
                     return when(position) {
-                        0 -> HomeFragment()
-                        1 -> HomeFragment()
-                        else -> HomeFragment()
+                        0 -> LocalFragment()
+                        1 -> CloudFragment()
+                        else -> MyFragment()
                     }
                 }
             }
@@ -92,9 +90,9 @@ class MainActivity : AppCompatActivity() {
                 override fun onPageSelected(position: Int) {
                     smoothBottomBar.itemActiveIndex = position
                     tvTitle.text = when (position) {
-                        0 -> "首页"
-                        1 -> "文件"
-                        else -> "我的"
+                        0 -> getString(R.string.local)
+                        1 -> getString(R.string.cloud)
+                        else -> getString(R.string.my)
                     }
                 }
 

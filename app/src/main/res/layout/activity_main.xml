@@ -28,7 +28,7 @@
             android:textColor="@color/white"
             android:textSize="16dp"
             android:textStyle="bold"
-            android:text="@string/home"
+            android:text="@string/local"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ivAdd"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +68,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/menu_main_bottom"
             app:textColor="@color/white"
-            app:textSize="14dp"
+            app:textSize="12dp"
             tools:ignore="SpUsage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
