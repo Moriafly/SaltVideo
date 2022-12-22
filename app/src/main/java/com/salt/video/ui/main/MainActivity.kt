@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.documentfile.provider.DocumentFile
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.dylanc.activityresult.launcher.OpenDocumentLauncher
 import com.dylanc.activityresult.launcher.OpenDocumentTreeLauncher
 import com.kongzue.dialogx.dialogs.BottomMenu
@@ -18,6 +21,7 @@ import com.kongzue.dialogx.dialogs.PopMenu
 import com.salt.video.R
 import com.salt.video.databinding.ActivityMainBinding
 import com.salt.video.databinding.ActivityPlayerBinding
+import com.salt.video.ui.main.home.HomeFragment
 import com.salt.video.ui.player.PlayerActivity
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         binding.root.setOnApplyWindowInsetsListener { v, insets ->
             binding.clTitleBar.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 topMargin = insets.systemWindowInsetTop
+            }
+            binding.clBottomBar.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                bottomMargin = insets.systemWindowInsetBottom
             }
             return@setOnApplyWindowInsetsListener insets
         }
@@ -57,6 +64,48 @@ class MainActivity : AppCompatActivity() {
                     return@setOnMenuItemClickListener false
                 }
 
+        }
+
+        initView()
+    }
+
+    private fun initView() {
+        with(binding) {
+            viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
+                override fun getCount(): Int {
+                    return 3
+                }
+
+                override fun getItem(position: Int): Fragment {
+                    return when(position) {
+                        0 -> HomeFragment()
+                        1 -> HomeFragment()
+                        else -> HomeFragment()
+                    }
+                }
+            }
+            viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+                }
+
+                override fun onPageSelected(position: Int) {
+                    smoothBottomBar.itemActiveIndex = position
+                    tvTitle.text = when (position) {
+                        0 -> "首页"
+                        1 -> "文件"
+                        else -> "我的"
+                    }
+                }
+
+                override fun onPageScrollStateChanged(state: Int) {
+
+                }
+            })
+
+            smoothBottomBar.setOnItemSelectedListener {
+                viewPager.setCurrentItem(it, true)
+            }
         }
     }
 
