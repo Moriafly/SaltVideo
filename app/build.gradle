@@ -15,7 +15,7 @@ android {
         minSdk 23
         targetSdk 33
         versionCode gitCommits
-        versionName "0.1.3-build"
+        versionName "0.2.0-build"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
