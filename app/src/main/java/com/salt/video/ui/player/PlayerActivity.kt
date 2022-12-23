@@ -1,18 +1,21 @@
 package com.salt.video.ui.player
 
 import android.app.Activity
+import android.app.PictureInPictureParams
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.Log
+import android.util.Rational
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -24,7 +27,9 @@ import com.dso.ext.toTimeFormat
 import com.salt.video.R
 import com.salt.video.core.PlayerState
 import com.salt.video.databinding.ActivityPlayerBinding
+import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
+import com.shuyu.gsyvideoplayer.player.SystemPlayerManager
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
@@ -58,6 +63,8 @@ class PlayerActivity : AppCompatActivity() {
 
         // 使用 Exo2 内核
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
+//        PlayerFactory.setPlayManager(SystemPlayerManager::class.java)
+//        PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
 
         val radius = 25f
 
@@ -137,18 +144,43 @@ class PlayerActivity : AppCompatActivity() {
                 }
             }
 
+            // Listener is called immediately after the user exits PiP but before animating.
+//            saltVideoPlayer.addOnLayoutChangeListener { _, left, top, right, bottom,
+//                                                   oldLeft, oldTop, oldRight, oldBottom ->
+//                if (left != oldLeft || right != oldRight || top != oldTop
+//                    || bottom != oldBottom) {
+//                    // The playerView's bounds changed, update the source hint rect to
+//                    // reflect its new bounds.
+//                    val sourceRectHint = Rect()
+//                    saltVideoPlayer.getGlobalVisibleRect(sourceRectHint)
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                        setPictureInPictureParams(
+//                            PictureInPictureParams.Builder()
+//                                .setSourceRectHint(sourceRectHint)
+//                                .build()
+//                        )
+//                    }
+//                }
+//            }
             saltVideoPlayer.onPlayerStateChange = {
                 when (it) {
                     PlayerState.RESUME -> ivPlayerState.setImageResource(R.drawable.ic_pause)
                     PlayerState.PAUSE -> ivPlayerState.setImageResource(R.drawable.ic_play)
                 }
             }
-            saltVideoPlayer.onVideoSizeChangeListener = { width, height ->
+            saltVideoPlayer.onVideoSizeChangeListener = { width: Int, height: Int, numerator: Int, denominator: Int ->
                 Log.d(TAG, "video w = $width, h = $height")
                 if (width > height) {
                     this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE)
                 } else {
                     this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT)
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setPictureInPictureParams(
+                        PictureInPictureParams.Builder()
+                            .setAspectRatio(Rational(width, height))
+                            .build()
+                    )
                 }
                 shotPicHandler.sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
             }

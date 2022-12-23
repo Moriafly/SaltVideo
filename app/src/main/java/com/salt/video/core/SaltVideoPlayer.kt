@@ -8,15 +8,18 @@ import com.salt.video.R
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 
 /**
- * SAR表示Sample Aspect Ratio，含义是采样宽高比。
- * DAR（Display Aspect Ratio）表示显示宽高比，也就是我们经常说的16:9，4:3。
+ * SAR 表示 Sample Aspect Ratio，含义是采样宽高比。
+ * DAR（Display Aspect Ratio）表示显示宽高比，也就是我们经常说的 16:9，4:3。
  */
 class SaltVideoPlayer: StandardGSYVideoPlayer {
     constructor(context: Context?, fullFlag: Boolean?) : super(context, fullFlag)
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
 
-    var onVideoSizeChangeListener: (width: Int, height: Int) -> Unit = { _, _ -> }
+    /**
+     * @param
+     */
+    var onVideoSizeChangeListener: (width: Int, height: Int, numerator: Int, denominator: Int) -> Unit = { _, _, _, _ -> }
 
     var onClickUiToggle: () -> Unit = {}
 
@@ -58,7 +61,7 @@ class SaltVideoPlayer: StandardGSYVideoPlayer {
 
     override fun onVideoSizeChanged() {
         super.onVideoSizeChanged()
-        onVideoSizeChangeListener.invoke(currentVideoWidth, currentVideoHeight)
+        onVideoSizeChangeListener.invoke(currentVideoWidth, currentVideoHeight, videoSarNum, videoSarDen)
     }
 
     override fun onClickUiToggle(e: MotionEvent?) {
