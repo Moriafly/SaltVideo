@@ -30,6 +30,7 @@ import com.salt.video.databinding.ActivityPlayerBinding
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.player.SystemPlayerManager
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
@@ -65,6 +66,9 @@ class PlayerActivity : AppCompatActivity() {
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
 //        PlayerFactory.setPlayManager(SystemPlayerManager::class.java)
 //        PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
+
+        // 支持 HDR https://developer.android.google.cn/guide/topics/media/hdr-playback#set_up_hdr_playback_in_your_app
+        GSYVideoType.setRenderType(GSYVideoType.SUFRACE)
 
         val radius = 25f
 
