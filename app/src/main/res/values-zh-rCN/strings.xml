@@ -6,4 +6,5 @@
     <string name="video">视频</string>
     <string name="my">我的</string>
     <string name="error">错误</string>
+    <string name="confirm">确认</string>
 </resources>

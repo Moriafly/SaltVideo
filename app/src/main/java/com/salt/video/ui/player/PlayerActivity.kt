@@ -24,6 +24,7 @@ import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.dso.ext.toTimeFormat
+import com.kongzue.dialogx.dialogs.MessageDialog
 import com.salt.video.R
 import com.salt.video.core.PlayerState
 import com.salt.video.databinding.ActivityPlayerBinding
@@ -55,10 +56,7 @@ class PlayerActivity : AppCompatActivity() {
                 } else {
 
                 }
-
-
             }
-
         }
     }
 
@@ -151,6 +149,10 @@ class PlayerActivity : AppCompatActivity() {
                 } else {
                     this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT)
                 }
+            }
+
+            tvTitle.setOnClickListener {
+                MessageDialog.show(getString(R.string.video), tvTitle.text, getString(R.string.confirm))
             }
 
             // Listener is called immediately after the user exits PiP but before animating.

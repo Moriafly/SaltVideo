@@ -112,11 +112,11 @@ class MainActivity : AppCompatActivity() {
             openDocumentTreeLauncher.launch { uri ->
                 if (uri != null) {
                     val documentFile = DocumentFile.fromTreeUri(this, uri)
-
+                    MessageDialog.show(getString(R.string.error), "功能开发中，敬请期待", "确定")
                 }
             }
         } catch (e: Exception) {
-            MessageDialog.show(getString(R.string.error), "无法调用系统文件选择", "确定")
+            MessageDialog.show(getString(R.string.error), "无法调用系统文件选择", getString(R.string.confirm))
         }
     }
 

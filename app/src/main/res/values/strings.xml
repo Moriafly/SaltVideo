@@ -5,4 +5,5 @@
     <string name="video">Video</string>
     <string name="my">My</string>
     <string name="error">Error</string>
+    <string name="confirm">Confirm</string>
 </resources>
