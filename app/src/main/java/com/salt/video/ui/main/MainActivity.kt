@@ -14,9 +14,8 @@ import com.kongzue.dialogx.dialogs.InputDialog
 import com.kongzue.dialogx.dialogs.PopMenu
 import com.salt.video.R
 import com.salt.video.databinding.ActivityMainBinding
-import com.salt.video.ui.main.cloud.CloudFragment
-import com.salt.video.ui.main.local.LocalFragment
 import com.salt.video.ui.main.my.MyFragment
+import com.salt.video.ui.main.video.VideoFragment
 import com.salt.video.ui.player.PlayerActivity
 
 class MainActivity : AppCompatActivity() {
@@ -71,13 +70,12 @@ class MainActivity : AppCompatActivity() {
         with(binding) {
             viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
                 override fun getCount(): Int {
-                    return 3
+                    return 2
                 }
 
                 override fun getItem(position: Int): Fragment {
                     return when(position) {
-                        0 -> LocalFragment()
-                        1 -> CloudFragment()
+                        0 -> VideoFragment()
                         else -> MyFragment()
                     }
                 }
@@ -90,8 +88,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onPageSelected(position: Int) {
                     smoothBottomBar.itemActiveIndex = position
                     tvTitle.text = when (position) {
-                        0 -> getString(R.string.local)
-                        1 -> getString(R.string.cloud)
+                        0 -> getString(R.string.video)
                         else -> getString(R.string.my)
                     }
                 }

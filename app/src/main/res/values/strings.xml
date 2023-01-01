@@ -2,5 +2,6 @@
     <string name="app_name">Salt Video</string>
     <string name="local">Local</string>
     <string name="cloud">Cloud</string>
+    <string name="video">Video</string>
     <string name="my">My</string>
 </resources>

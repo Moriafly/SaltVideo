@@ -3,5 +3,6 @@
     <string name="app_name">椒盐视频</string>
     <string name="local">本地</string>
     <string name="cloud">云端</string>
+    <string name="video">视频</string>
     <string name="my">我的</string>
 </resources>
