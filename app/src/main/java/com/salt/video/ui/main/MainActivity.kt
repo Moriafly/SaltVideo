@@ -47,18 +47,19 @@ class MainActivity : AppCompatActivity() {
             PopMenu.build()
                 .setMenuList(
                     listOf(
+                        "本地音视频文件夹",
                         "单个本地视频",
                         "单个本地音乐",
                         "单个网络音视频",
-//                        "本地音视频文件夹",
 //                        "WebDAV 服务器"
                     )
                 )
                 .setOnMenuItemClickListener { dialog, text, index ->
                     when (index) {
-                        0 -> openDocumentLauncher("video/*")
-                        1 -> openDocumentLauncher("audio/*")
-                        2 -> openDialog()
+                        0 -> openDocumentTreeLauncher()
+                        1 -> openDocumentLauncher("video/*")
+                        2 -> openDocumentLauncher("audio/*")
+                        3 -> openDialog()
                     }
                     return@setOnMenuItemClickListener false
                 }
@@ -76,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun getItem(position: Int): Fragment {
-                    return when(position) {
+                    return when (position) {
                         0 -> VideoFragment()
                         else -> MyFragment()
                     }
@@ -115,16 +116,20 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         } catch (e: Exception) {
-            MessageDialog.show("错误", "无法调用系统文件选择")
+            MessageDialog.show(getString(R.string.error), "无法调用系统文件选择", "确定")
         }
     }
 
     private fun openDocumentLauncher(vararg input: String) {
-        openDocumentLauncher.launch(*input) { uri ->
-            if (uri != null) {
-                val documentFile = DocumentFile.fromSingleUri(this, uri)
-                PlayerActivity.start(this, uri.toString(), documentFile?.name ?: "")
+        try {
+            openDocumentLauncher.launch(*input) { uri ->
+                if (uri != null) {
+                    val documentFile = DocumentFile.fromSingleUri(this, uri)
+                    PlayerActivity.start(this, uri.toString(), documentFile?.name ?: "")
+                }
             }
+        } catch (e: Exception) {
+            MessageDialog.show(getString(R.string.error), "无法调用系统文件选择", "确定")
         }
     }
 

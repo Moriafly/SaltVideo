@@ -5,4 +5,5 @@
     <string name="cloud">云端</string>
     <string name="video">视频</string>
     <string name="my">我的</string>
+    <string name="error">错误</string>
 </resources>
