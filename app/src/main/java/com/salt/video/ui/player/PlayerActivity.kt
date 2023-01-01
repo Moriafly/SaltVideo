@@ -41,17 +41,22 @@ class PlayerActivity : AppCompatActivity() {
 
     private lateinit var ivShotPic: ImageView
 
+    /** 标题栏和底部操作栏是否处于显示状态 */
+    private var titleAndBottomBarVisibility = false
+
     private val shotPicHandler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             if (msg.what == HANDLER_MSG_SHOT_PIC) {
-                if (binding.saltVideoPlayer.currentVideoHeight > 0 && binding.saltVideoPlayer.currentVideoWidth > 0) {
-                    binding.saltVideoPlayer.taskShotPic {
-                        ivShotPic.setImageBitmap(it)
-                        // Log.d(TAG, "shot")
+                if (titleAndBottomBarVisibility && binding.saltVideoPlayer.currentVideoHeight > 0 && binding.saltVideoPlayer.currentVideoWidth > 0) {
+                    binding.saltVideoPlayer.taskShotPic { bitmap ->
+                        ivShotPic.setImageBitmap(bitmap)
+                        sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
                     }
+                } else {
+
                 }
 
-                sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
+
             }
 
         }
@@ -236,12 +241,11 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private var titleAndBottomBarVisibility = false
-
     private fun hideTitleAndBottomBar() {
         binding.blurViewTitleBar.visibility = View.INVISIBLE
         binding.blurViewBottomBar.visibility = View.INVISIBLE
         titleAndBottomBarVisibility = false
+        shotPicHandler.removeMessages(HANDLER_MSG_SHOT_PIC)
     }
 
     private fun showTitleAndBottomBar() {
@@ -253,6 +257,7 @@ class PlayerActivity : AppCompatActivity() {
         binding.blurViewTitleBar.visibility = View.VISIBLE
         binding.blurViewBottomBar.visibility = View.VISIBLE
         titleAndBottomBarVisibility = true
+        shotPicHandler.sendEmptyMessage(HANDLER_MSG_SHOT_PIC)
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean,
@@ -309,7 +314,7 @@ class PlayerActivity : AppCompatActivity() {
         const val EXTRA_TITLE = "extra_title"
 
         private const val HANDLER_MSG_SHOT_PIC = 1001
-        private const val HANDLER_MSG_SHOT_PIC_DELAY = 42L
+        private const val HANDLER_MSG_SHOT_PIC_DELAY = 100L
 
         fun start(activity: Activity, url: String, title: String) {
             val intent = Intent(activity, PlayerActivity::class.java)

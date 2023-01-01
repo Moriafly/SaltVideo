@@ -11,12 +11,14 @@ import androidx.viewpager.widget.ViewPager
 import com.dylanc.activityresult.launcher.OpenDocumentLauncher
 import com.dylanc.activityresult.launcher.OpenDocumentTreeLauncher
 import com.kongzue.dialogx.dialogs.InputDialog
+import com.kongzue.dialogx.dialogs.MessageDialog
 import com.kongzue.dialogx.dialogs.PopMenu
 import com.salt.video.R
 import com.salt.video.databinding.ActivityMainBinding
 import com.salt.video.ui.main.my.MyFragment
 import com.salt.video.ui.main.video.VideoFragment
 import com.salt.video.ui.player.PlayerActivity
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
@@ -101,6 +103,19 @@ class MainActivity : AppCompatActivity() {
             smoothBottomBar.setOnItemSelectedListener {
                 viewPager.setCurrentItem(it, true)
             }
+        }
+    }
+
+    private fun openDocumentTreeLauncher() {
+        try {
+            openDocumentTreeLauncher.launch { uri ->
+                if (uri != null) {
+                    val documentFile = DocumentFile.fromTreeUri(this, uri)
+
+                }
+            }
+        } catch (e: Exception) {
+            MessageDialog.show("错误", "无法调用系统文件选择")
         }
     }
 
