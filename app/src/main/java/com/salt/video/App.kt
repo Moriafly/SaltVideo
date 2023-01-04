@@ -6,6 +6,7 @@ import com.kongzue.dialogx.style.IOSStyle
 import com.kongzue.dialogx.style.MIUIStyle
 import com.kongzue.dialogx.style.MaterialStyle
 import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
+import com.salt.video.ui.dialogx.XSMStyle
 
 class App: Application() {
 
@@ -13,7 +14,7 @@ class App: Application() {
         super.onCreate()
         // 初始化 DialogX
         DialogX.init(this)
-        DialogX.globalStyle = IOSStyle()
+        DialogX.globalStyle = XSMStyle()
         DialogX.globalTheme = DialogX.THEME.DARK
     }
 
