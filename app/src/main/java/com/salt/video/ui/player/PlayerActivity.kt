@@ -2,6 +2,7 @@ package com.salt.video.ui.player
 
 import android.app.Activity
 import android.app.PictureInPictureParams
+import android.app.PictureInPictureUiState
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
@@ -16,6 +17,7 @@ import android.os.Looper
 import android.os.Message
 import android.util.Log
 import android.util.Rational
+import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -23,6 +25,7 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Lifecycle
 import com.dso.ext.toTimeFormat
 import com.kongzue.dialogx.dialogs.MessageDialog
 import com.salt.video.R
@@ -263,19 +266,38 @@ class PlayerActivity : AppCompatActivity() {
         shotPicHandler.sendEmptyMessage(HANDLER_MSG_SHOT_PIC)
     }
 
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean,
-                                               newConfig: Configuration) {
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
         if (isInPictureInPictureMode) {
             hideTitleAndBottomBar()
             // Hide the full-screen UI (controls, etc.) while in picture-in-picture mode.
         } else {
             // Restore the full-screen UI.
         }
+
+        if (lifecycle.currentState == Lifecycle.State.CREATED) {
+            finishAndRemoveTask();
+            // when user click on Close button of PIP this will trigger, do what you want here
+        }
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "onResume()")
         hideNavigationBar()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause(), isInPictureInPictureMode = $isInPictureInPictureMode")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop(), isInPictureInPictureMode = $isInPictureInPictureMode")
+
+        if (isInPictureInPictureMode) {
+            // onDestroy()
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
