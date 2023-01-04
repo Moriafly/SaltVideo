@@ -19,11 +19,13 @@
             android:exported="true"
             android:screenOrientation="fullSensor"
             android:supportsPictureInPicture="true"
-            android:theme="@style/Theme.SaltVideo.FullScreen.Window" >
+            android:theme="@style/Theme.SaltVideo.FullScreen.Window">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="content" />
                 <data android:mimeType="video/*" />
                 <data android:mimeType="audio/*" />
@@ -32,7 +34,8 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.SaltVideo.FullScreen">
+            android:theme="@style/Theme.SaltVideo.FullScreen"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
