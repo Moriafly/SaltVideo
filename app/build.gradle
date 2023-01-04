@@ -22,6 +22,9 @@ android {
         ndk {
             abiFilters "arm64-v8a"
         }
+
+        renderscriptTargetApi 21
+        renderscriptSupportModeEnabled true
     }
 
     buildFeatures {
