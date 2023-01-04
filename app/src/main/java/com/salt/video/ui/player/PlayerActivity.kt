@@ -125,8 +125,9 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun initView() {
         with(binding) {
+
             ivBack.setOnClickListener {
-                finish()
+                onBackPressed()
             }
 
             ivPlayerState.setOnClickListener {
@@ -295,6 +296,21 @@ class PlayerActivity : AppCompatActivity() {
         }
 //        setContentView(R.layout.activity_player)
 //        saltVideoPlayer = findViewById<SaltVideoPlayer>(R.id.saltVideoPlayer)
+    }
+
+    override fun onBackPressed() {
+        MessageDialog.build()
+            .setTitle("退出播放")
+            .setMessage("是否退出播放？")
+            .setOkButton(getString(R.string.confirm)) { dialog, v ->
+                super.onBackPressed()
+                false
+            }
+            .setCancelButton(getString(R.string.cancel)) {  dialog, v ->
+
+                false
+            }
+            .show()
     }
 
     override fun onDestroy() {
