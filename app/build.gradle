@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId "com.salt.video"
-        minSdk 23
+        minSdk 24
         targetSdk 33
         versionCode gitCommits
         versionName "0.2.0-build"
