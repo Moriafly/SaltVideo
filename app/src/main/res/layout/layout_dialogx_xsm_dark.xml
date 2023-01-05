@@ -80,6 +80,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginRight="15dp"
                             android:background="@drawable/editbox_dialogx_ios_dark"
+                            android:imeOptions="flagNoExtractUi"
                             android:inputType="text"
                             android:maxLines="1"
                             android:padding="6dp"
