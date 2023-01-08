@@ -2,17 +2,18 @@ package com.salt.video
 
 import android.app.Application
 import com.kongzue.dialogx.DialogX
-import com.kongzue.dialogx.style.IOSStyle
-import com.kongzue.dialogx.style.MIUIStyle
-import com.kongzue.dialogx.style.MaterialStyle
-import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
 import com.salt.video.ui.dialogx.XSMStyle
 
 class App: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        // 初始化 DialogX
+        //
+        initDialogX()
+    }
+
+    /** 初始化 DialogX */
+    private fun initDialogX() {
         DialogX.init(this)
         DialogX.globalStyle = XSMStyle()
         DialogX.globalTheme = DialogX.THEME.DARK
