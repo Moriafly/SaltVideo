@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
             openDocumentTreeLauncher.launch { uri ->
                 if (uri != null) {
                     val documentFile = DocumentFile.fromTreeUri(this, uri)
-                    MessageDialog.show(getString(R.string.error), "功能开发中，敬请期待", "确定")
+                    MessageDialog.show(getString(R.string.error), "功能开发中，敬请期待", getString(R.string.confirm))
                 }
             }
         } catch (e: Exception) {
@@ -137,8 +137,8 @@ class MainActivity : AppCompatActivity() {
         InputDialog(
             "网络视频",
             "输入网络地址",
-            "确定",
-            "取消",
+            getString(R.string.confirm),
+            getString(R.string.cancel),
             ""
         )
             .setOkButton { dialog, v, inputStr ->
