@@ -307,6 +307,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+
         MessageDialog.build()
             .setTitle("退出播放")
             .setMessage("是否退出播放？")

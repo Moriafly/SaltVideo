@@ -43,29 +43,6 @@ class MainActivity : AppCompatActivity() {
             return@setOnApplyWindowInsetsListener insets
         }
 
-        binding.ivAdd.setOnClickListener {
-            PopMenu.build()
-                .setMenuList(
-                    listOf(
-                        "本地音视频文件夹",
-                        "单个本地视频",
-                        "单个本地音乐",
-                        "单个网络音视频",
-//                        "WebDAV 服务器"
-                    )
-                )
-                .setOnMenuItemClickListener { dialog, text, index ->
-                    when (index) {
-                        0 -> openDocumentTreeLauncher()
-                        1 -> openDocumentLauncher("video/*")
-                        2 -> openDocumentLauncher("audio/*")
-                        3 -> openDialog()
-                    }
-                    return@setOnMenuItemClickListener false
-                }
-                .show()
-        }
-
         initView()
     }
 
@@ -147,5 +124,15 @@ class MainActivity : AppCompatActivity() {
                 return@setOkButton false
             }
             .show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.snowingView.startFall()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.snowingView.stopFall()
     }
 }
