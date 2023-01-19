@@ -2,14 +2,15 @@ package com.salt.video
 
 import android.app.Application
 import com.kongzue.dialogx.DialogX
+import com.salt.video.data.AppDatabase
 import com.salt.video.ui.dialogx.XSMStyle
 
 class App: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        //
         initDialogX()
+        initAppDatabase()
     }
 
     /** 初始化 DialogX */
@@ -17,6 +18,18 @@ class App: Application() {
         DialogX.init(this)
         DialogX.globalStyle = XSMStyle()
         DialogX.globalTheme = DialogX.THEME.DARK
+    }
+
+    /** 初始化数据库 */
+    private fun initAppDatabase() {
+        appDatabase = AppDatabase.getDatabase(applicationContext)
+    }
+
+    companion object {
+
+        lateinit var appDatabase: AppDatabase
+            private set
+
     }
 
 }
