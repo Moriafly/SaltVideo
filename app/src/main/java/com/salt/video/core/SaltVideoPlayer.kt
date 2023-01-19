@@ -3,6 +3,8 @@ package com.salt.video.core
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import com.salt.video.R
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
@@ -67,6 +69,47 @@ class SaltVideoPlayer: StandardGSYVideoPlayer {
     override fun onClickUiToggle(e: MotionEvent?) {
         super.onClickUiToggle(e)
         onClickUiToggle()
+    }
+
+    override fun init(context: Context?) {
+        super.init(context)
+        gestureDetector = GestureDetector(getContext().applicationContext, object : SimpleOnGestureListener() {
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                touchDoubleUp(e)
+                return super.onDoubleTap(e)
+            }
+
+            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                if (!mChangePosition && !mChangeVolume && !mBrightness) {
+                    onClickUiToggle(e)
+                }
+                return super.onSingleTapConfirmed(e)
+            }
+
+            override fun onLongPress(e: MotionEvent) {
+                super.onLongPress(e)
+                touchLongPress(e)
+            }
+        })
+    }
+
+    /** 是否进行了长按倍数播放 */
+    private var isLongPressSpeed = false
+
+    override fun touchLongPress(e: MotionEvent?) {
+        super.touchLongPress(e)
+        isLongPressSpeed = true
+        speed = 2f
+        Log.d(TAG, "touchLongPress(e)")
+    }
+
+    override fun touchSurfaceUp() {
+        super.touchSurfaceUp()
+        if (isLongPressSpeed) {
+            isLongPressSpeed = false
+            speed = 1f
+        }
+        Log.d(TAG, "touchSurfaceUp()")
     }
 
 //    override fun getProgressDialogLayoutId(): Int {
