@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun openDocumentTreeLauncher() {
+    fun openDocumentTreeLauncher() {
         try {
             openDocumentTreeLauncher.launch { uri ->
                 if (uri != null) {
@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun openDocumentLauncher(vararg input: String) {
+    fun openDocumentLauncher(vararg input: String) {
         try {
             openDocumentLauncher.launch(*input) { uri ->
                 if (uri != null) {
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun openDialog() {
+    fun openDialog() {
         InputDialog(
             "网络视频",
             "输入网络地址",
