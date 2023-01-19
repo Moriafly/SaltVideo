@@ -43,22 +43,19 @@ class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
 
-    private lateinit var ivShotPic: ImageView
-
     /** 标题栏和底部操作栏是否处于显示状态 */
     private var titleAndBottomBarVisibility = false
 
     private val shotPicHandler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             if (msg.what == HANDLER_MSG_SHOT_PIC) {
-                if (titleAndBottomBarVisibility && binding.saltVideoPlayer.currentVideoHeight > 0 && binding.saltVideoPlayer.currentVideoWidth > 0) {
-                    binding.saltVideoPlayer.taskShotPic { bitmap ->
-                        ivShotPic.setImageBitmap(bitmap)
-                        sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
-                    }
-                } else {
-
-                }
+//                if (titleAndBottomBarVisibility && binding.saltVideoPlayer.currentVideoHeight > 0 && binding.saltVideoPlayer.currentVideoWidth > 0) {
+//                    binding.saltVideoPlayer.taskShotPic { bitmap ->
+//                        sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
+//                    }
+//                } else {
+//
+//                }
             }
         }
     }
@@ -87,19 +84,8 @@ class PlayerActivity : AppCompatActivity() {
         // Can be used in case your layout has a lot of transparent space and your content
         // gets a too low alpha value after blur is applied.
         val windowBackground = decorView.getBackground();
-        val flShot = findViewById<FrameLayout>(R.id.flShot)
-        ivShotPic = findViewById<ImageView>(R.id.ivShotPic)
-
-        val blurViewTitleBar = findViewById<BlurView>(R.id.blurViewTitleBar)
-        blurViewTitleBar.setupWith(flShot, RenderScriptBlur(this)) // or RenderEffectBlur
-            .setFrameClearDrawable(windowBackground) // Optional
-            .setBlurRadius(radius)
 
         val clBottomBar = findViewById<ConstraintLayout>(R.id.clBottomBar)
-        val blurViewBottomBar = findViewById<BlurView>(R.id.blurViewBottomBar)
-        blurViewBottomBar.setupWith(flShot, RenderScriptBlur(this)) // or RenderEffectBlur
-            .setFrameClearDrawable(windowBackground) // Optional
-            .setBlurRadius(radius)
 
         val data = intent.data
         Log.d(TAG, "intent.data = $data")
@@ -248,8 +234,8 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun hideTitleAndBottomBar() {
-        binding.blurViewTitleBar.visibility = View.INVISIBLE
-        binding.blurViewBottomBar.visibility = View.INVISIBLE
+        binding.clTitleBar.visibility = View.INVISIBLE
+        binding.clBottomBar.visibility = View.INVISIBLE
         titleAndBottomBarVisibility = false
         shotPicHandler.removeMessages(HANDLER_MSG_SHOT_PIC)
     }
@@ -260,8 +246,8 @@ class PlayerActivity : AppCompatActivity() {
                 return
             }
         }
-        binding.blurViewTitleBar.visibility = View.VISIBLE
-        binding.blurViewBottomBar.visibility = View.VISIBLE
+        binding.clTitleBar.visibility = View.VISIBLE
+        binding.clBottomBar.visibility = View.VISIBLE
         titleAndBottomBarVisibility = true
         shotPicHandler.sendEmptyMessage(HANDLER_MSG_SHOT_PIC)
     }
