@@ -49,7 +49,7 @@ class VideoFragment: LazyFragment() {
                             HomeItemType.LOCAL_AUDIO_VIDEO_FOLDER -> R.drawable.ic_folder
                             HomeItemType.SINGLE_LOCAL_VIDEO -> R.drawable.ic_video_file
                             HomeItemType.SINGLE_LOCAL_AUDIO -> R.drawable.ic_audio_file
-                            HomeItemType.SINGLE_INTERNET_AUDIO_VIDEO -> R.drawable.ic_internet
+                            HomeItemType.SINGLE_INTERNET_AUDIO_VIDEO -> R.drawable.ic_wifi_tethering
                         }
                     )
                     tvTitle.text = when (homeItemType) {

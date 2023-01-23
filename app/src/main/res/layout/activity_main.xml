@@ -4,14 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/background"
     tools:context=".ui.main.MainActivity">
-
-    <com.salt.video.ui.widget.snowing.SnowingView
-        android:id="@+id/snowingView"
-        app:src="@drawable/ic_snowflake"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clTitleBar"
@@ -27,13 +21,20 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/video"
-            android:textColor="@color/white"
+            android:textColor="@color/text"
             android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:alpha="0.25"
+            android:background="@color/text"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -45,21 +46,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:alpha="0.25"
+            android:background="@color/text"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <me.ibrahimsn.lib.SmoothBottomBar
             android:id="@+id/smoothBottomBar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             app:backgroundColor="#00000000"
             app:iconSize="24dp"
-            app:iconTint="@color/dialogxMIUIButtonGrayNormalDark"
-            app:iconTintActive="@color/white"
+            app:iconTint="@color/sub_text"
+            app:iconTintActive="@color/text"
             app:indicatorColor="#00000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/menu_main_bottom"
-            app:textColor="@color/white"
-            app:textSize="12dp"
+            app:textColor="@color/text"
+            app:textSize="13dp"
             tools:ignore="SpUsage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

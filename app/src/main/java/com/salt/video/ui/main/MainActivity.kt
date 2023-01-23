@@ -128,11 +128,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        binding.snowingView.startFall()
     }
 
     override fun onPause() {
         super.onPause()
-        binding.snowingView.stopFall()
     }
 }
