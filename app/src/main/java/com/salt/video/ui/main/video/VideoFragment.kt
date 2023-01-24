@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
+import androidx.activity.viewModels
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
@@ -18,6 +20,8 @@ class VideoFragment : LazyFragment() {
 
     private var _binding: FragmentVideoBinding? = null
     private val binding get() = _binding!!
+
+    private val videoViewModel: VideoViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentVideoBinding.inflate(inflater, container, false)
