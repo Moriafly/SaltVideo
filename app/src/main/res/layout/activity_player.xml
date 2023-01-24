@@ -40,7 +40,8 @@
             android:padding="12dp"
             android:src="@drawable/ic_back"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:tint="@color/white" />
 
         <TextView
             android:id="@+id/tvTitle"
@@ -60,8 +61,8 @@
         android:id="@+id/clBottomBar"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:paddingBottom="4dp"
         android:background="@drawable/bg_player_ui_bottom"
+        android:paddingBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -79,17 +80,19 @@
             android:padding="12dp"
             android:src="@drawable/ic_pause"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/ivPictureInPicture"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="12dp"
+            android:padding="14dp"
             android:src="@drawable/ic_picture_in_picture"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ivRotation" />
+            app:layout_constraintEnd_toStartOf="@id/ivRotation"
+            app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/ivRotation"
@@ -97,10 +100,11 @@
             android:layout_height="48dp"
             android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="12dp"
-            android:src="@drawable/ic_rotate_screen"
+            android:padding="14dp"
+            android:src="@drawable/ic_screen_rotation"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/white" />
 
         <TextView
             android:id="@+id/tvProgress"
