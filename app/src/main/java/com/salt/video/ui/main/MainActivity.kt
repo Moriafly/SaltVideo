@@ -1,6 +1,7 @@
 package com.salt.video.ui.main
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
@@ -17,12 +18,15 @@ import com.salt.video.R
 import com.salt.video.databinding.ActivityMainBinding
 import com.salt.video.ui.main.my.MyFragment
 import com.salt.video.ui.main.video.VideoFragment
+import com.salt.video.ui.main.video.VideoViewModel
 import com.salt.video.ui.player.PlayerActivity
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val videoViewModel: VideoViewModel by viewModels()
 
     /** SAF 选择 */
     private val openDocumentTreeLauncher = OpenDocumentTreeLauncher(this)

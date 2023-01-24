@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.salt.video.data.dao.MediaSourceDao
 import com.salt.video.data.dao.VideoDao
 import com.salt.video.data.entry.MediaSource
 import com.salt.video.data.entry.Video
@@ -13,14 +14,15 @@ import com.salt.video.data.entry.Video
  */
 @Database(
     entities = [
-        Video::class,
-        MediaSource::class
+        MediaSource::class,
+        Video::class
     ],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
+    abstract fun mediaSourceDao(): MediaSourceDao
     abstract fun videoDao(): VideoDao
 
     companion object {

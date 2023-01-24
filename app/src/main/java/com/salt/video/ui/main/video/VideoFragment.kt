@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
-import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
@@ -39,6 +39,10 @@ class VideoFragment : LazyFragment() {
                 HomeItem.SINGLE_LOCAL_VIDEO,
                 HomeItem.SINGLE_LOCAL_AUDIO,
                 HomeItem.SINGLE_INTERNET_AUDIO_VIDEO
+            )
+            val homeFooters = listOf(
+                HomeFooter.ADD_LOCAL_FOLDER,
+                HomeFooter.ADD_WEBDAV_FOLDER
             )
 
             rvHome.linear().setup {
@@ -91,9 +95,12 @@ class VideoFragment : LazyFragment() {
                     }
                 }
             }
-            rvHome.bindingAdapter.models = homeItems
-            rvHome.bindingAdapter.addFooter(HomeFooter.ADD_LOCAL_FOLDER)
-            rvHome.bindingAdapter.addFooter(HomeFooter.ADD_WEBDAV_FOLDER)
+
+            lifecycleScope.launchWhenCreated {
+                videoViewModel.getAllMediaSource().collect { mediaSources ->
+                    rvHome.bindingAdapter.models = homeItems + mediaSources + homeFooters
+                }
+            }
         }
     }
 
