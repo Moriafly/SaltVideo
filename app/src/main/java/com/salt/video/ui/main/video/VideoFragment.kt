@@ -14,7 +14,7 @@ import com.salt.video.databinding.FragmentVideoBinding
 import com.salt.video.ui.base.LazyFragment
 import com.salt.video.ui.main.MainActivity
 
-class VideoFragment: LazyFragment() {
+class VideoFragment : LazyFragment() {
 
     private var _binding: FragmentVideoBinding? = null
     private val binding get() = _binding!!
@@ -32,53 +32,76 @@ class VideoFragment: LazyFragment() {
     override fun lazyInit() {
         with(binding) {
             val homeItems = listOf(
-                HomeItemType.LOCAL_AUDIO_VIDEO_FOLDER,
-                HomeItemType.SINGLE_LOCAL_VIDEO,
-                HomeItemType.SINGLE_LOCAL_AUDIO,
-                HomeItemType.SINGLE_INTERNET_AUDIO_VIDEO
+                HomeItem.SINGLE_LOCAL_VIDEO,
+                HomeItem.SINGLE_LOCAL_AUDIO,
+                HomeItem.SINGLE_INTERNET_AUDIO_VIDEO
             )
 
             rvHome.linear().setup {
-                addType<HomeItemType>(R.layout.rv_home)
+                addType<HomeItem>(R.layout.rv_home)
+                addType<HomeFooter>(R.layout.rv_home_footer)
                 onBind {
-                    val homeItemType = getModel<HomeItemType>()
-                    val ivIcon = findView<ImageView>(R.id.ivIcon)
-                    val tvTitle = findView<TextView>(R.id.tvTitle)
-                    ivIcon.setImageResource(
-                        when (homeItemType) {
-                            HomeItemType.LOCAL_AUDIO_VIDEO_FOLDER -> R.drawable.ic_folder
-                            HomeItemType.SINGLE_LOCAL_VIDEO -> R.drawable.ic_video_file
-                            HomeItemType.SINGLE_LOCAL_AUDIO -> R.drawable.ic_audio_file
-                            HomeItemType.SINGLE_INTERNET_AUDIO_VIDEO -> R.drawable.ic_wifi_tethering
+                    when (itemViewType) {
+                        R.layout.rv_home -> {
+                            val homeItem = getModel<HomeItem>()
+                            val ivIcon = findView<ImageView>(R.id.ivIcon)
+                            val tvTitle = findView<TextView>(R.id.tvTitle)
+                            ivIcon.setImageResource(
+                                when (homeItem) {
+                                    HomeItem.SINGLE_LOCAL_VIDEO -> R.drawable.ic_video_file
+                                    HomeItem.SINGLE_LOCAL_AUDIO -> R.drawable.ic_audio_file
+                                    HomeItem.SINGLE_INTERNET_AUDIO_VIDEO -> R.drawable.ic_wifi_tethering
+                                }
+                            )
+                            tvTitle.text = when (homeItem) {
+                                HomeItem.SINGLE_LOCAL_VIDEO -> "单个本地视频"
+                                HomeItem.SINGLE_LOCAL_AUDIO -> "单个本地音乐"
+                                HomeItem.SINGLE_INTERNET_AUDIO_VIDEO -> "单个网络音视频"
+                            }
                         }
-                    )
-                    tvTitle.text = when (homeItemType) {
-                        HomeItemType.LOCAL_AUDIO_VIDEO_FOLDER -> "本地音视频文件夹"
-                        HomeItemType.SINGLE_LOCAL_VIDEO -> "单个本地视频"
-                        HomeItemType.SINGLE_LOCAL_AUDIO -> "单个本地音乐"
-                        HomeItemType.SINGLE_INTERNET_AUDIO_VIDEO -> "单个网络音视频"
+
+                        R.layout.rv_home_footer -> {
+                            val homeFooter = getModel<HomeFooter>()
+                            val tvTitle = findView<TextView>(R.id.tvTitle)
+                            val mainActivity = requireActivity() as MainActivity
+                            tvTitle.text = when (homeFooter) {
+                                HomeFooter.ADD_LOCAL_FOLDER -> "添加本地文件夹"
+                                HomeFooter.ADD_WEBDAV_FOLDER -> "添加 WebDAV"
+                            }
+                            tvTitle.setOnClickListener {
+                                when (homeFooter) {
+                                    HomeFooter.ADD_LOCAL_FOLDER -> mainActivity.openDocumentTreeLauncher()
+                                    HomeFooter.ADD_WEBDAV_FOLDER -> {}
+                                }
+                            }
+                        }
                     }
                 }
                 onClick(R.id.item) {
-                    val homeItemType = getModel<HomeItemType>()
+                    val homeItem = getModel<HomeItem>()
                     val mainActivity = requireActivity() as MainActivity
-                    when (homeItemType) {
-                        HomeItemType.LOCAL_AUDIO_VIDEO_FOLDER -> mainActivity.openDocumentTreeLauncher()
-                        HomeItemType.SINGLE_LOCAL_VIDEO -> mainActivity.openDocumentLauncher("video/*")
-                        HomeItemType.SINGLE_LOCAL_AUDIO -> mainActivity.openDocumentLauncher("audio/*")
-                        HomeItemType.SINGLE_INTERNET_AUDIO_VIDEO -> mainActivity.openDialog()
+                    when (homeItem) {
+                        HomeItem.SINGLE_LOCAL_VIDEO -> mainActivity.openDocumentLauncher("video/*")
+                        HomeItem.SINGLE_LOCAL_AUDIO -> mainActivity.openDocumentLauncher("audio/*")
+                        HomeItem.SINGLE_INTERNET_AUDIO_VIDEO -> mainActivity.openDialog()
                     }
                 }
             }
             rvHome.bindingAdapter.models = homeItems
+            rvHome.bindingAdapter.addFooter(HomeFooter.ADD_LOCAL_FOLDER)
+            rvHome.bindingAdapter.addFooter(HomeFooter.ADD_WEBDAV_FOLDER)
         }
     }
 
 }
 
-enum class HomeItemType {
-    LOCAL_AUDIO_VIDEO_FOLDER,
+enum class HomeItem {
     SINGLE_LOCAL_VIDEO,
     SINGLE_LOCAL_AUDIO,
     SINGLE_INTERNET_AUDIO_VIDEO
+}
+
+enum class HomeFooter {
+    ADD_LOCAL_FOLDER,
+    ADD_WEBDAV_FOLDER
 }

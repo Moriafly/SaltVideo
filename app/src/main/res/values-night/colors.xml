@@ -3,4 +3,5 @@
     <color name="background">#000000</color>
     <color name="text">#FFFFFF</color>
     <color name="sub_text">#80FFFFFF</color>
+    <color name="divider">#40FFFFFF</color>
 </resources>
