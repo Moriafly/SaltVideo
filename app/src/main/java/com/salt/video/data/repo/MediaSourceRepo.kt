@@ -8,7 +8,7 @@ object MediaSourceRepo {
 
     suspend fun insert(mediaSource: MediaSource) = dao.insert(mediaSource)
 
-    suspend fun getAll(): Flow<List<MediaSource>> = dao.getAll()
+    fun getAll(): Flow<List<MediaSource>> = dao.getAll()
 
     private val dao = App.appDatabase.mediaSourceDao()
 

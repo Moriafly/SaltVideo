@@ -20,6 +20,6 @@ class VideoViewModel: ViewModel() {
         }
     }
 
-    suspend fun getAllMediaSource(): Flow<List<MediaSource>> = MediaSourceRepo.getAll()
+    fun getAllMediaSource(): Flow<List<MediaSource>> = MediaSourceRepo.getAll()
 
 }
