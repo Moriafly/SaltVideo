@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.net.toUri
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
 import com.salt.video.R
+import com.salt.video.data.entry.MediaSource
 import com.salt.video.databinding.FragmentVideoBinding
 import com.salt.video.ui.base.LazyFragment
 import com.salt.video.ui.main.MainActivity
@@ -47,11 +51,13 @@ class VideoFragment : LazyFragment() {
 
             rvHome.linear().setup {
                 addType<HomeItem>(R.layout.rv_home)
+                addType<MediaSource>(R.layout.rv_media_source)
                 addType<HomeFooter>(R.layout.rv_home_footer)
                 onBind {
                     when (itemViewType) {
                         R.layout.rv_home -> {
                             val homeItem = getModel<HomeItem>()
+                            val clBase = findView<ConstraintLayout>(R.id.clBase)
                             val ivIcon = findView<ImageView>(R.id.ivIcon)
                             val tvTitle = findView<TextView>(R.id.tvTitle)
                             ivIcon.setImageResource(
@@ -65,6 +71,27 @@ class VideoFragment : LazyFragment() {
                                 HomeItem.SINGLE_LOCAL_VIDEO -> "单个本地视频"
                                 HomeItem.SINGLE_LOCAL_AUDIO -> "单个本地音乐"
                                 HomeItem.SINGLE_INTERNET_AUDIO_VIDEO -> "单个网络音视频"
+                            }
+                            clBase.setOnClickListener {
+                                val mainActivity = requireActivity() as MainActivity
+                                when (homeItem) {
+                                    HomeItem.SINGLE_LOCAL_VIDEO -> mainActivity.openDocumentLauncher("video/*")
+                                    HomeItem.SINGLE_LOCAL_AUDIO -> mainActivity.openDocumentLauncher("audio/*")
+                                    HomeItem.SINGLE_INTERNET_AUDIO_VIDEO -> mainActivity.openDialog()
+                                }
+                            }
+                        }
+
+                        R.layout.rv_media_source -> {
+                            val mediaSource = getModel<MediaSource>()
+                            val documentFile = DocumentFile.fromTreeUri(requireContext(), mediaSource.url.toUri())
+                            val clBase = findView<ConstraintLayout>(R.id.clBase)
+                            val ivIcon = findView<ImageView>(R.id.ivIcon)
+                            val tvTitle = findView<TextView>(R.id.tvTitle)
+                            ivIcon.setImageResource(R.drawable.ic_folder)
+                            tvTitle.text = documentFile?.name
+                            clBase.setOnClickListener {
+
                             }
                         }
 
@@ -83,15 +110,6 @@ class VideoFragment : LazyFragment() {
                                 }
                             }
                         }
-                    }
-                }
-                onClick(R.id.item) {
-                    val homeItem = getModel<HomeItem>()
-                    val mainActivity = requireActivity() as MainActivity
-                    when (homeItem) {
-                        HomeItem.SINGLE_LOCAL_VIDEO -> mainActivity.openDocumentLauncher("video/*")
-                        HomeItem.SINGLE_LOCAL_AUDIO -> mainActivity.openDocumentLauncher("audio/*")
-                        HomeItem.SINGLE_INTERNET_AUDIO_VIDEO -> mainActivity.openDialog()
                     }
                 }
             }

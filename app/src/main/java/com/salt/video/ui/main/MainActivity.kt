@@ -1,5 +1,6 @@
 package com.salt.video.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -92,8 +93,10 @@ class MainActivity : AppCompatActivity() {
         try {
             openDocumentTreeLauncher.launch { uri ->
                 if (uri != null) {
-                    val documentFile = DocumentFile.fromTreeUri(this, uri)
-                    MessageDialog.show(getString(R.string.error), "功能开发中，敬请期待", getString(R.string.confirm))
+                    // 请求永久 URI 授权
+                    contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                    // val documentFile = DocumentFile.fromTreeUri(this, uri)
+                    videoViewModel.addLocalFolder(uri)
                 }
             }
         } catch (e: Exception) {
