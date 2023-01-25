@@ -13,6 +13,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/background</item>
     </style>
 
     <style name="Theme.SaltVideo.FullScreen">

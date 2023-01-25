@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SeekBar
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Lifecycle
@@ -307,19 +308,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-
-        MessageDialog.build()
-            .setTitle("退出播放")
-            .setMessage("是否退出播放？")
-            .setOkButton(getString(R.string.confirm)) { dialog, v ->
-                super.onBackPressed()
-                false
-            }
-            .setCancelButton(getString(R.string.cancel)) {  dialog, v ->
-
-                false
-            }
-            .show()
+        super.onBackPressed()
     }
 
     override fun onDestroy() {

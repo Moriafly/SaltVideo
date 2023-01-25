@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainActivity">
+    tools:context=".ui.localfolder.LocalFolderActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clTitleBar"
@@ -14,19 +14,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="16dp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="@string/video"
+            android:layout_marginEnd="16dp"
             android:textColor="@color/text"
             android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/ivBack"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="文件夹名称" />
 
         <View
             android:layout_width="match_parent"
@@ -36,6 +46,13 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvLocalFolder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/clBottomBar"
+        app:layout_constraintTop_toBottomOf="@id/clTitleBar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clBottomBar"
@@ -52,32 +69,8 @@
             android:background="@color/text"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <me.ibrahimsn.lib.SmoothBottomBar
-            android:id="@+id/smoothBottomBar"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            app:backgroundColor="#00000000"
-            app:iconSize="24dp"
-            app:iconTint="@color/sub_text"
-            app:iconTintActive="@color/text"
-            app:indicatorColor="#00000000"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/menu_main_bottom"
-            app:textColor="@color/text"
-            app:textSize="13dp"
-            tools:ignore="SpUsage" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/clBottomBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clTitleBar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

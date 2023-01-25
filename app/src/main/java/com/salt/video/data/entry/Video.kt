@@ -13,4 +13,7 @@ data class Video(
     @PrimaryKey
     val url: String,
 
+    /** 标题 */
+    val title: String,
+
 )

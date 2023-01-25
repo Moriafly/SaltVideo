@@ -1,6 +1,7 @@
 package com.salt.video.ui.main.video
 
 import android.os.Bundle
+import android.provider.DocumentsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.salt.video.R
 import com.salt.video.data.entry.MediaSource
 import com.salt.video.databinding.FragmentVideoBinding
 import com.salt.video.ui.base.LazyFragment
+import com.salt.video.ui.localfolder.LocalFolderActivity
 import com.salt.video.ui.main.MainActivity
 
 class VideoFragment : LazyFragment() {
@@ -84,13 +86,21 @@ class VideoFragment : LazyFragment() {
 
                         R.layout.rv_media_source -> {
                             val mediaSource = getModel<MediaSource>()
-                            val documentFile = DocumentFile.fromTreeUri(requireContext(), mediaSource.url.toUri())
+                            val treeUri = mediaSource.url.toUri()
+                            val documentFile = DocumentFile.fromTreeUri(requireContext(), treeUri)
                             val clBase = findView<ConstraintLayout>(R.id.clBase)
                             val ivIcon = findView<ImageView>(R.id.ivIcon)
                             val tvTitle = findView<TextView>(R.id.tvTitle)
                             ivIcon.setImageResource(R.drawable.ic_folder)
                             tvTitle.text = documentFile?.name
                             clBase.setOnClickListener {
+                                // mediaSource 是 treeUri
+                                // 调用路径页面需要传入普通的 uri （非 treeUri）
+                                if (documentFile != null) {
+                                    val documentId = DocumentsContract.getDocumentId(documentFile.uri)
+                                    val directoryUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
+                                    LocalFolderActivity.start(requireActivity(), directoryUri.toString())
+                                }
 
                             }
                         }
