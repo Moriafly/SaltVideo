@@ -2,33 +2,25 @@ package com.salt.video.ui.localfolder
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.net.toUri
 import androidx.core.view.updateLayoutParams
-import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
 import coil.load
+import com.blankj.utilcode.util.ActivityUtils
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
-import com.dylanc.activityresult.launcher.OpenDocumentLauncher
-import com.dylanc.activityresult.launcher.OpenDocumentTreeLauncher
 import com.salt.video.R
-import com.salt.video.data.entry.MediaSource
 import com.salt.video.data.entry.Video
 import com.salt.video.databinding.ActivityLocalFolderBinding
-import com.salt.video.databinding.ActivityMainBinding
-import com.salt.video.ui.main.video.VideoViewModel
+import com.salt.video.ui.main.MainActivity
 import com.salt.video.ui.player.PlayerActivity
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.launch
 
 class LocalFolderActivity : AppCompatActivity() {
 
@@ -61,6 +53,9 @@ class LocalFolderActivity : AppCompatActivity() {
 
     private fun initView() {
         with (binding) {
+            ivHome.setOnClickListener {
+                ActivityUtils.finishToActivity(MainActivity::class.java, false, true)
+            }
             rvLocalFolder.linear().setup {
                 addType<LocalFolder>(R.layout.rv_media_source)
                 addType<Video>(R.layout.rv_video)
