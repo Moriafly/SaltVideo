@@ -58,5 +58,9 @@
     public <init>(android.content.Context, android.util.AttributeSet, int);
 }
 
+-dontwarn org.bouncycastle.jsse.**
+-dontwarn org.conscrypt.**
+-dontwarn org.openjsse.**
+
 # 将所有混淆的类移动到 androidx.core
 -repackageclasses androidx.core
