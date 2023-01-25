@@ -53,6 +53,9 @@ class LocalFolderActivity : AppCompatActivity() {
 
     private fun initView() {
         with (binding) {
+            ivBack.setOnClickListener {
+                finish()
+            }
             ivHome.setOnClickListener {
                 ActivityUtils.finishToActivity(MainActivity::class.java, false, true)
             }
