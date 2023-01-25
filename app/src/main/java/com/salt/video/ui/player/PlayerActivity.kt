@@ -227,7 +227,7 @@ class PlayerActivity : AppCompatActivity() {
                     // playerViewModel.seeking = false
 //                playerViewModel.setProgress(pro)
 //                playerViewModel.refreshProgress()
-                    saltVideoPlayer.seekTo(pro.toLong())
+                    saltVideoPlayer.seekTo(pro.toLong().coerceAtLeast(1L))
                 }
 
             })
