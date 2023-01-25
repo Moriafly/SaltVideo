@@ -15,7 +15,7 @@ android {
         minSdk 24
         targetSdk 33
         versionCode gitCommits
-        versionName "0.4.0-build"
+        versionName "0.5.0-build"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
