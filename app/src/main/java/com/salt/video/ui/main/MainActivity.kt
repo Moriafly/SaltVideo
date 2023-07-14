@@ -5,13 +5,17 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -34,10 +38,12 @@ import com.moriafly.salt.ui.UnstableSaltApi
 import com.salt.video.R
 import com.salt.video.databinding.ActivityMainBinding
 import com.salt.video.ui.main.my.MyFragment
+import com.salt.video.ui.main.my.MyScreen
 import com.salt.video.ui.main.video.VideoFragment
 import com.salt.video.ui.main.video.VideoScreen
 import com.salt.video.ui.main.video.VideoViewModel
 import com.salt.video.ui.player.PlayerActivity
+import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
@@ -164,7 +170,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-@OptIn(UnstableSaltApi::class)
+@OptIn(UnstableSaltApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun MainUI(
     videoViewModel: VideoViewModel
@@ -175,30 +181,46 @@ fun MainUI(
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
+        val pagerState = rememberPagerState {
+            2
+        }
         TitleBar(
             onBack = { },
-            text = stringResource(id = R.string.video),
+            text = stringResource(id = if (pagerState.currentPage == 0) R.string.video else R.string.my),
             showBackBtn = false
         )
-
-        Column(
+        HorizontalPager(
+            state = pagerState,
             modifier = Modifier
                 .weight(1f)
                 .fillMaxSize()
-                .background(SaltTheme.colors.background)
-        ) {
-            VideoScreen(videoViewModel = videoViewModel)
+                .background(SaltTheme.colors.background),
+            beyondBoundsPageCount = 1
+        ) {page ->
+            when (page) {
+                0 -> VideoScreen(videoViewModel = videoViewModel)
+                1 -> MyScreen()
+            }
         }
+        val scope = rememberCoroutineScope()
         BottomBar {
             BottomBarItem(
-                state = true,
-                onClick = { /*TODO*/ },
+                state = pagerState.currentPage == 0,
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(0)
+                    }
+                },
                 painter = painterResource(id = R.drawable.ic_main_bottom_video),
                 text = stringResource(id = R.string.video)
             )
             BottomBarItem(
-                state = true,
-                onClick = { /*TODO*/ },
+                state = pagerState.currentPage == 1,
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(1)
+                    }
+                },
                 painter = painterResource(id = R.drawable.ic_kayaking),
                 text = stringResource(id = R.string.my)
             )
