@@ -2,8 +2,19 @@ package com.salt.video.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.documentfile.provider.DocumentFile
@@ -15,17 +26,23 @@ import com.dylanc.activityresult.launcher.OpenDocumentTreeLauncher
 import com.kongzue.dialogx.dialogs.InputDialog
 import com.kongzue.dialogx.dialogs.MessageDialog
 import com.kongzue.dialogx.dialogs.PopMenu
+import com.moriafly.salt.ui.BottomBar
+import com.moriafly.salt.ui.BottomBarItem
+import com.moriafly.salt.ui.SaltTheme
+import com.moriafly.salt.ui.TitleBar
+import com.moriafly.salt.ui.UnstableSaltApi
 import com.salt.video.R
 import com.salt.video.databinding.ActivityMainBinding
 import com.salt.video.ui.main.my.MyFragment
 import com.salt.video.ui.main.video.VideoFragment
+import com.salt.video.ui.main.video.VideoScreen
 import com.salt.video.ui.main.video.VideoViewModel
 import com.salt.video.ui.player.PlayerActivity
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    // private lateinit var binding: ActivityMainBinding
 
     private val videoViewModel: VideoViewModel by viewModels()
 
@@ -35,58 +52,63 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        binding.root.setOnApplyWindowInsetsListener { v, insets ->
-            binding.clTitleBar.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                topMargin = insets.systemWindowInsetTop
+        setContent {
+            SaltTheme {
+                MainUI(videoViewModel = videoViewModel)
             }
-            binding.clBottomBar.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                bottomMargin = insets.systemWindowInsetBottom
-            }
-            return@setOnApplyWindowInsetsListener insets
         }
-
-        initView()
+//        binding = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
+//
+//        binding.root.setOnApplyWindowInsetsListener { v, insets ->
+//            binding.clTitleBar.updateLayoutParams<ConstraintLayout.LayoutParams> {
+//                topMargin = insets.systemWindowInsetTop
+//            }
+//            binding.clBottomBar.updateLayoutParams<ConstraintLayout.LayoutParams> {
+//                bottomMargin = insets.systemWindowInsetBottom
+//            }
+//            return@setOnApplyWindowInsetsListener insets
+//        }
+//
+//        initView()
     }
 
     private fun initView() {
-        with(binding) {
-            viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
-                override fun getCount(): Int {
-                    return 2
-                }
-
-                override fun getItem(position: Int): Fragment {
-                    return when (position) {
-                        0 -> VideoFragment()
-                        else -> MyFragment()
-                    }
-                }
-            }
-            viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
-                }
-
-                override fun onPageSelected(position: Int) {
-                    smoothBottomBar.itemActiveIndex = position
-                    tvTitle.text = when (position) {
-                        0 -> getString(R.string.video)
-                        else -> getString(R.string.my)
-                    }
-                }
-
-                override fun onPageScrollStateChanged(state: Int) {
-
-                }
-            })
-
-            smoothBottomBar.setOnItemSelectedListener {
-                viewPager.setCurrentItem(it, true)
-            }
-        }
+//        with(binding) {
+//            viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
+//                override fun getCount(): Int {
+//                    return 2
+//                }
+//
+//                override fun getItem(position: Int): Fragment {
+//                    return when (position) {
+//                        0 -> VideoFragment()
+//                        else -> MyFragment()
+//                    }
+//                }
+//            }
+//            viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+//                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+//
+//                }
+//
+//                override fun onPageSelected(position: Int) {
+//                    smoothBottomBar.itemActiveIndex = position
+//                    tvTitle.text = when (position) {
+//                        0 -> getString(R.string.video)
+//                        else -> getString(R.string.my)
+//                    }
+//                }
+//
+//                override fun onPageScrollStateChanged(state: Int) {
+//
+//                }
+//            })
+//
+//            smoothBottomBar.setOnItemSelectedListener {
+//                viewPager.setCurrentItem(it, true)
+//            }
+//        }
     }
 
     fun openDocumentTreeLauncher() {
@@ -139,5 +161,47 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+    }
+}
+
+@OptIn(UnstableSaltApi::class)
+@Composable
+fun MainUI(
+    videoViewModel: VideoViewModel
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .statusBarsPadding()
+            .navigationBarsPadding()
+    ) {
+        TitleBar(
+            onBack = { },
+            text = stringResource(id = R.string.video),
+            showBackBtn = false
+        )
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxSize()
+                .background(SaltTheme.colors.background)
+        ) {
+            VideoScreen(videoViewModel = videoViewModel)
+        }
+        BottomBar {
+            BottomBarItem(
+                state = true,
+                onClick = { /*TODO*/ },
+                painter = painterResource(id = R.drawable.ic_main_bottom_video),
+                text = stringResource(id = R.string.video)
+            )
+            BottomBarItem(
+                state = true,
+                onClick = { /*TODO*/ },
+                painter = painterResource(id = R.drawable.ic_kayaking),
+                text = stringResource(id = R.string.my)
+            )
+        }
     }
 }

@@ -202,8 +202,8 @@ class PlayerActivity : AppCompatActivity() {
             saltVideoPlayer.onSetProgressAndTime = { currentTime, totalTime ->
                 seekBar.max = totalTime.toInt()
                 seekBar.progress = currentTime.toInt()
-//                tvProgress.text = currentTime.toTimeFormat()
-//                tvDuration.text = totalTime.toTimeFormat()
+                tvProgress.text = currentTime.toTimeFormat()
+                tvDuration.text = totalTime.toTimeFormat()
             }
 
             hideTitleAndBottomBar()
@@ -353,4 +353,19 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
+}
+
+/**
+ * 转换成时间格式
+ */
+private fun Long.toTimeFormat(): String {
+    // 时，分，秒
+    val hour = this / (60 * 60 * 1000)
+    val min = this % (60 * 60 * 1000) / (60 * 1000)
+    val sec = this % (60 * 1000) / 1000
+    return if (hour == 0L) {
+        String.format("%02d:%02d", min, sec)
+    } else {
+        String.format("%02d:%02d:%02d", hour, min, sec)
+    }
 }

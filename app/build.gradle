@@ -8,7 +8,7 @@ def gitCommits = Integer.parseInt('git rev-list HEAD --count'.execute().text.tri
 
 android {
     namespace 'com.salt.video'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.salt.video"
@@ -29,6 +29,11 @@ android {
 
     buildFeatures {
         viewBinding true
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.6"
     }
 
     buildTypes {
@@ -45,12 +50,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
     }
 }
 
@@ -101,4 +106,18 @@ dependencies {
 
     implementation("io.coil-kt:coil:2.2.2")
     implementation("io.coil-kt:coil-video:2.2.2")
+
+    def composeBom = platform('androidx.compose:compose-bom:2023.05.01')
+    implementation composeBom
+    androidTestImplementation composeBom
+    // or Material Design 2
+    implementation 'androidx.compose.material:material'
+    // or skip Material Design and build directly on top of foundational components
+    implementation 'androidx.compose.foundation:foundation'
+    // or only import the main APIs for the underlying toolkit systems,
+    // such as input and measurement/layout
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.activity:activity-compose:1.6.1'
+
+    implementation("com.github.Moriafly:SaltUI:0.1.0-dev10")
 }
