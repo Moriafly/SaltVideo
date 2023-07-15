@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.moriafly.salt.ui.ItemTitle
 import com.moriafly.salt.ui.RoundedColumn
+import com.moriafly.salt.ui.SaltUILogo
 import com.salt.video.R
 
 @Composable
@@ -15,6 +16,8 @@ fun MyScreen() {
         modifier = Modifier
             .fillMaxSize()
     ) {
+        SaltUILogo()
+
         RoundedColumn {
             ItemTitle(text = stringResource(id = R.string.app_name))
         }

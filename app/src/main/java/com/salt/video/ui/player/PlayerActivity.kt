@@ -21,6 +21,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -47,16 +48,23 @@ class PlayerActivity : AppCompatActivity() {
     /** 标题栏和底部操作栏是否处于显示状态 */
     private var titleAndBottomBarVisibility = false
 
-    private val shotPicHandler = object : Handler(Looper.getMainLooper()) {
+    private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
-            if (msg.what == HANDLER_MSG_SHOT_PIC) {
-                if (titleAndBottomBarVisibility && binding.saltVideoPlayer.currentVideoHeight > 0 && binding.saltVideoPlayer.currentVideoWidth > 0) {
-                    binding.saltVideoPlayer.taskShotPic { bitmap ->
-                        ivShotPic.setImageBitmap(bitmap)
-                        sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
-                    }
-                } else {
+            when (msg.what) {
+                HANDLER_MSG_SHOT_PIC -> {
+                    if (titleAndBottomBarVisibility && binding.saltVideoPlayer.currentVideoHeight > 0 && binding.saltVideoPlayer.currentVideoWidth > 0) {
+                        binding.saltVideoPlayer.taskShotPic { bitmap ->
+                            ivShotPic.setImageBitmap(bitmap)
+                            sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
+                        }
+                    } else {
 
+                    }
+                }
+
+                HANDLER_MSG_HIDE_UI -> {
+                    // TODO 可能用户会点击其他地方
+                    // hideTitleAndBottomBar()
                 }
             }
         }
@@ -83,9 +91,17 @@ class PlayerActivity : AppCompatActivity() {
 
 
         rootView.setOnApplyWindowInsetsListener { view, windowInsets ->
-            binding.blurViewTitleBar.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                binding.blurViewTitleBar.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     height = dpToPx(this@PlayerActivity, 56f) + (windowInsets.displayCutout?.safeInsetTop ?: 0)
+                    setMargins(
+                        windowInsets.displayCutout?.safeInsetLeft ?: 0,
+                        0,
+                        windowInsets.displayCutout?.safeInsetRight ?: 0,
+                        0
+                    )
+                }
+                binding.blurViewBottomBar.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     setMargins(
                         windowInsets.displayCutout?.safeInsetLeft ?: 0,
                         0,
@@ -209,7 +225,7 @@ class PlayerActivity : AppCompatActivity() {
                             .build()
                     )
                 }
-                shotPicHandler.sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
+                handler.sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
             }
             saltVideoPlayer.onSetProgressAndTime = { currentTime, totalTime ->
                 seekBar.max = totalTime.toInt()
@@ -264,7 +280,7 @@ class PlayerActivity : AppCompatActivity() {
         binding.blurViewTitleBar.visibility = View.INVISIBLE
         binding.blurViewBottomBar.visibility = View.INVISIBLE
         titleAndBottomBarVisibility = false
-        shotPicHandler.removeMessages(HANDLER_MSG_SHOT_PIC)
+        handler.removeMessages(HANDLER_MSG_SHOT_PIC)
     }
 
     private fun showTitleAndBottomBar() {
@@ -276,10 +292,13 @@ class PlayerActivity : AppCompatActivity() {
         binding.blurViewTitleBar.visibility = View.VISIBLE
         binding.blurViewBottomBar.visibility = View.VISIBLE
         titleAndBottomBarVisibility = true
-        shotPicHandler.sendEmptyMessage(HANDLER_MSG_SHOT_PIC)
+        handler.sendEmptyMessageDelayed(HANDLER_MSG_HIDE_UI, HANDLER_MSG_HIDE_UI_DELAY)
+        handler.sendEmptyMessage(HANDLER_MSG_SHOT_PIC)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         if (isInPictureInPictureMode) {
             hideTitleAndBottomBar()
             // Hide the full-screen UI (controls, etc.) while in picture-in-picture mode.
@@ -363,6 +382,9 @@ class PlayerActivity : AppCompatActivity() {
 
         private const val HANDLER_MSG_SHOT_PIC = 1001
         private const val HANDLER_MSG_SHOT_PIC_DELAY = 100L
+
+        private const val HANDLER_MSG_HIDE_UI = 1002
+        private const val HANDLER_MSG_HIDE_UI_DELAY = 5000L
 
         fun start(activity: Activity, url: String, title: String) {
             val intent = Intent(activity, PlayerActivity::class.java)
