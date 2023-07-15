@@ -22,7 +22,7 @@
             android:exported="true"
             android:screenOrientation="fullSensor"
             android:supportsPictureInPicture="true"
-            android:theme="@style/Theme.SaltVideo.FullScreen.Window">
+            android:theme="@style/Theme.SaltVideo.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

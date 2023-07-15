@@ -2,14 +2,12 @@ package com.salt.video.ui.player
 
 import android.app.Activity
 import android.app.PictureInPictureParams
-import android.app.PictureInPictureUiState
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -17,29 +15,30 @@ import android.os.Looper
 import android.os.Message
 import android.util.Log
 import android.util.Rational
-import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SeekBar
-import androidx.annotation.RequiresApi
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Lifecycle
-import com.kongzue.dialogx.dialogs.MessageDialog
+import com.blankj.utilcode.util.BarUtils
 import com.salt.video.R
 import com.salt.video.core.PlayerState
 import com.salt.video.databinding.ActivityPlayerBinding
-import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
-import com.shuyu.gsyvideoplayer.player.SystemPlayerManager
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
-import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
+import android.graphics.Color as AndroidColor
 
 class PlayerActivity : AppCompatActivity() {
+
+    private val playerViewModel: PlayerViewModel by viewModels()
 
     private lateinit var binding: ActivityPlayerBinding
 
@@ -78,9 +77,25 @@ class PlayerActivity : AppCompatActivity() {
 
         val radius = 25f
 
-        val decorView = getWindow().getDecorView();
+        val decorView = window.decorView
         // ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
         val rootView = decorView.findViewById(android.R.id.content) as ViewGroup
+
+
+        rootView.setOnApplyWindowInsetsListener { view, windowInsets ->
+            binding.blurViewTitleBar.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    height = dpToPx(this@PlayerActivity, 56f) + (windowInsets.displayCutout?.safeInsetTop ?: 0)
+                    setMargins(
+                        windowInsets.displayCutout?.safeInsetLeft ?: 0,
+                        0,
+                        windowInsets.displayCutout?.safeInsetRight ?: 0,
+                        0
+                    )
+                }
+            }
+            windowInsets
+        }
 
         // Optional:
         // Set drawable to draw in the beginning of each blurred frame.
@@ -90,14 +105,12 @@ class PlayerActivity : AppCompatActivity() {
         val flShot = findViewById<FrameLayout>(R.id.flShot)
         ivShotPic = findViewById<ImageView>(R.id.ivShotPic)
 
-        val blurViewTitleBar = findViewById<BlurView>(R.id.blurViewTitleBar)
-        blurViewTitleBar.setupWith(flShot, RenderScriptBlur(this)) // or RenderEffectBlur
+        binding.blurViewTitleBar.setupWith(flShot, RenderScriptBlur(this)) // or RenderEffectBlur
             .setFrameClearDrawable(windowBackground) // Optional
             .setBlurRadius(radius)
 
         val clBottomBar = findViewById<ConstraintLayout>(R.id.clBottomBar)
-        val blurViewBottomBar = findViewById<BlurView>(R.id.blurViewBottomBar)
-        blurViewBottomBar.setupWith(flShot, RenderScriptBlur(this)) // or RenderEffectBlur
+        binding.blurViewBottomBar.setupWith(flShot, RenderScriptBlur(this)) // or RenderEffectBlur
             .setFrameClearDrawable(windowBackground) // Optional
             .setBlurRadius(radius)
 
@@ -109,7 +122,7 @@ class PlayerActivity : AppCompatActivity() {
             if (url != null && title != null) {
                 binding.saltVideoPlayer.setUp(url, false, "")
                 binding.saltVideoPlayer.startPlayLogic()
-                binding.tvTitle.text = title
+                playerViewModel.postTitle(title)
             }
         } else {
             val url = data.toString()
@@ -117,11 +130,9 @@ class PlayerActivity : AppCompatActivity() {
             if (url != null && title != null) {
                 binding.saltVideoPlayer.setUp(url, false, "")
                 binding.saltVideoPlayer.startPlayLogic()
-                binding.tvTitle.text = title
+                playerViewModel.postTitle(title)
             }
         }
-
-
 
         initView()
     }
@@ -129,8 +140,13 @@ class PlayerActivity : AppCompatActivity() {
     private fun initView() {
         with(binding) {
 
-            ivBack.setOnClickListener {
-                onBackPressed()
+            composeViewTitleBar.setContent {
+                TitleBarUI(
+                    onBack = {
+                        onBackPressed()
+                    },
+                    playerViewModel = playerViewModel
+                )
             }
 
             ivPlayerState.setOnClickListener {
@@ -153,10 +169,6 @@ class PlayerActivity : AppCompatActivity() {
                 } else {
                     this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT)
                 }
-            }
-
-            tvTitle.setOnClickListener {
-                MessageDialog.show(getString(R.string.video), tvTitle.text, getString(R.string.confirm))
             }
 
             // Listener is called immediately after the user exits PiP but before animating.
@@ -186,7 +198,7 @@ class PlayerActivity : AppCompatActivity() {
             saltVideoPlayer.onVideoSizeChangeListener = { width: Int, height: Int, numerator: Int, denominator: Int ->
                 Log.d(TAG, "video w = $width, h = $height")
                 if (width > height) {
-                    this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE)
+                    this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
                 } else {
                     this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT)
                 }
@@ -215,9 +227,10 @@ class PlayerActivity : AppCompatActivity() {
                 }
             }
 
-            seekBar.thumb = getDrawable(R.drawable.ic_orange)
+
+            seekBar.thumb = ContextCompat.getDrawable(this@PlayerActivity, R.drawable.ic_orange)
             // seekBar.thumb.colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC)
-            seekBar.progressDrawable.colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
+            seekBar.progressDrawable.colorFilter = PorterDuffColorFilter(AndroidColor.WHITE, PorterDuff.Mode.SRC_IN)
             // 歌曲进度条变化的监听
             seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
@@ -309,11 +322,19 @@ class PlayerActivity : AppCompatActivity() {
         super.onConfigurationChanged(newConfig)
         when (newConfig.orientation) {
             Configuration.ORIENTATION_LANDSCAPE -> {
-
                 Log.d(TAG, "onConfigurationChanged LANDSCAPE")
             }
+
             Configuration.ORIENTATION_PORTRAIT -> {
                 Log.d(TAG, "onConfigurationChanged PORTRAIT")
+            }
+
+            Configuration.ORIENTATION_SQUARE -> {
+
+            }
+
+            Configuration.ORIENTATION_UNDEFINED -> {
+
             }
         }
 //        setContentView(R.layout.activity_player)
@@ -330,10 +351,8 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun hideNavigationBar() {
-        val decorView: View = window.decorView
-        val uiOptions: Int = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN)
-        decorView.setSystemUiVisibility(uiOptions)
+        BarUtils.setStatusBarVisibility(this, false)
+        BarUtils.setNavBarVisibility(this, false)
     }
 
     companion object {
@@ -368,4 +387,9 @@ private fun Long.toTimeFormat(): String {
     } else {
         String.format("%02d:%02d:%02d", hour, min, sec)
     }
+}
+
+private fun dpToPx(context: Context, dp: Float): Int {
+    val density: Float = context.resources.getDisplayMetrics().density
+    return Math.round(dp * density)
 }

@@ -44,6 +44,7 @@ import com.salt.video.R
 import com.salt.video.data.entry.Video
 import com.salt.video.ui.main.MainActivity
 import com.salt.video.ui.player.PlayerActivity
+import com.salt.video.ui.theme.VideoTheme
 import com.skydoves.landscapist.glide.GlideImage
 
 class LocalFolderActivity : AppCompatActivity() {
@@ -55,7 +56,7 @@ class LocalFolderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SaltTheme {
+            VideoTheme {
                 LocalFolderUI(localFolderViewModel = localFolderViewModel)
             }
         }

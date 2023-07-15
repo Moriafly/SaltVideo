@@ -37,7 +37,7 @@
         android:id="@+id/blurViewTitleBar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        app:blurOverlayColor="#8C000000"
+        app:blurOverlayColor="#80000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -46,40 +46,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clTitleBar"
+        <androidx.compose.ui.platform.ComposeView
+            android:layout_gravity="bottom"
+            android:id="@+id/composeViewTitleBar"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:paddingTop="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/ivBack"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="12dp"
-                android:src="@drawable/ic_back"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="@id/ivBack"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivBack"
-                app:layout_constraintTop_toTopOf="@id/ivBack" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="48dp" />
 
     </eightbitlab.com.blurview.BlurView>
 
@@ -88,9 +59,8 @@
         android:id="@+id/blurViewBottomBar"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:background="@drawable/bg_player_ui_bottom"
         android:paddingBottom="4dp"
-        app:blurOverlayColor="#8C000000"
+        app:blurOverlayColor="#80000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -104,7 +74,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="4dp">
-
 
             <ImageView
                 android:id="@+id/ivPlayerState"

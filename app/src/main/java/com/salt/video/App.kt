@@ -5,6 +5,7 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.VideoFrameDecoder
 import com.kongzue.dialogx.DialogX
+import com.kongzue.dialogx.style.IOSStyle
 import com.kongzue.dialogx.style.MaterialStyle
 import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle
 import com.salt.video.data.AppDatabase
@@ -21,7 +22,7 @@ class App: Application(), ImageLoaderFactory {
     /** 初始化 DialogX */
     private fun initDialogX() {
         DialogX.init(this)
-        DialogX.globalStyle = MaterialStyle()
+        DialogX.globalStyle = IOSStyle()
         DialogX.globalTheme = DialogX.THEME.AUTO
     }
 

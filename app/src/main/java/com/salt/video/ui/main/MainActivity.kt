@@ -43,6 +43,7 @@ import com.salt.video.ui.main.video.VideoFragment
 import com.salt.video.ui.main.video.VideoScreen
 import com.salt.video.ui.main.video.VideoViewModel
 import com.salt.video.ui.player.PlayerActivity
+import com.salt.video.ui.theme.VideoTheme
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SaltTheme {
+            VideoTheme {
                 MainUI(videoViewModel = videoViewModel)
             }
         }
