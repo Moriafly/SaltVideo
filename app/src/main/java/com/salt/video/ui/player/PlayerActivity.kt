@@ -94,21 +94,19 @@ class PlayerActivity : AppCompatActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 binding.blurViewTitleBar.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     height = dpToPx(this@PlayerActivity, 56f) + (windowInsets.displayCutout?.safeInsetTop ?: 0)
-                    setMargins(
-                        windowInsets.displayCutout?.safeInsetLeft ?: 0,
-                        0,
-                        windowInsets.displayCutout?.safeInsetRight ?: 0,
-                        0
-                    )
                 }
-                binding.blurViewBottomBar.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    setMargins(
-                        windowInsets.displayCutout?.safeInsetLeft ?: 0,
-                        0,
-                        windowInsets.displayCutout?.safeInsetRight ?: 0,
-                        0
-                    )
-                }
+                binding.blurViewTitleBar.setPadding(
+                    windowInsets.displayCutout?.safeInsetLeft ?: 0,
+                    0,
+                    windowInsets.displayCutout?.safeInsetRight ?: 0,
+                    0
+                )
+                binding.blurViewBottomBar.setPadding(
+                    windowInsets.displayCutout?.safeInsetLeft ?: 0,
+                    0,
+                    windowInsets.displayCutout?.safeInsetRight ?: 0,
+                    0
+                )
             }
             windowInsets
         }

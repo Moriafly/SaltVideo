@@ -181,7 +181,7 @@ fun MainUI(
                 .fillMaxSize()
                 .background(SaltTheme.colors.background),
             beyondBoundsPageCount = 1,
-            userScrollEnabled = false
+            userScrollEnabled = true
         ) {page ->
             when (page) {
                 0 -> VideoScreen(videoViewModel = videoViewModel)

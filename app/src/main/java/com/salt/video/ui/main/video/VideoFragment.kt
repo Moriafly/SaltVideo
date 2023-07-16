@@ -124,11 +124,6 @@ class VideoFragment : LazyFragment() {
                 }
             }
 
-            lifecycleScope.launchWhenCreated {
-                videoViewModel.getAllMediaSource().collect { mediaSources ->
-                    rvHome.bindingAdapter.models = homeItems + mediaSources + homeFooters
-                }
-            }
         }
     }
 

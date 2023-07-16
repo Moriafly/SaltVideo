@@ -1,6 +1,8 @@
 package com.salt.video
 
+import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.VideoFrameDecoder
@@ -15,6 +17,7 @@ class App: Application(), ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
+        context = applicationContext
         initDialogX()
         initAppDatabase()
     }
@@ -39,7 +42,12 @@ class App: Application(), ImageLoaderFactory {
             .build()
     }
 
+
     companion object {
+
+        @SuppressLint("StaticFieldLeak")
+        lateinit var context: Context
+            private set
 
         lateinit var appDatabase: AppDatabase
             private set

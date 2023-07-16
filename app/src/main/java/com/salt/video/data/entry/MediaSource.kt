@@ -9,6 +9,9 @@ import androidx.room.PrimaryKey
 @Entity
 data class MediaSource (
 
+    /**
+     * 唯一路径
+     */
     @PrimaryKey
     val url: String
 
