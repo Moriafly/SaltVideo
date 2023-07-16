@@ -194,7 +194,7 @@ fun MainUI(
                 state = pagerState.currentPage == 0,
                 onClick = {
                     scope.launch {
-                        pagerState.scrollToPage(0)
+                        pagerState.animateScrollToPage(0)
                     }
                 },
                 painter = painterResource(id = R.drawable.ic_main_bottom_video),
@@ -204,7 +204,7 @@ fun MainUI(
                 state = pagerState.currentPage == 1,
                 onClick = {
                     scope.launch {
-                        pagerState.scrollToPage(1)
+                        pagerState.animateScrollToPage(1)
                     }
                 },
                 painter = painterResource(id = R.drawable.ic_kayaking),
