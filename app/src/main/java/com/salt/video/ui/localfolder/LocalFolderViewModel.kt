@@ -4,17 +4,15 @@ import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.provider.DocumentsContract
-import android.util.Log
 import androidx.core.database.getStringOrNull
 import androidx.core.net.toUri
-import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.salt.video.data.entry.Video
-import com.salt.video.data.ext.toVideo
 import com.salt.video.util.DocumentFileUtil
+import com.salt.video.util.pinyinString
+import com.salt.video.util.sort.SimpleNaturalComparator
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -92,7 +90,9 @@ class LocalFolderViewModel: ViewModel() {
             }
             cursor?.close()
 
-            _files.emit(folders + videos)
+            val sortedFolders = folders.sortedWith { o1, o2 -> SimpleNaturalComparator.getInstance<String>().compare(o1.name.pinyinString, o2.name.pinyinString) }
+            val sortedVideos = videos.sortedWith { o1, o2 -> SimpleNaturalComparator.getInstance<String>().compare(o1.title.pinyinString, o2.title.pinyinString) }
+            _files.emit(sortedFolders + sortedVideos)
         }
     }
 

@@ -252,7 +252,8 @@ private fun FileItem(file: Any) {
                     .clickable {
                         PlayerActivity.start(activity, file.url, file.title)
                     }
-                    .padding(16.dp, 12.dp)
+                    .padding(16.dp, 12.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 GlideImage(
                     imageModel = { file.url },

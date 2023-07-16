@@ -9,6 +9,7 @@ import com.moriafly.salt.ui.ItemTitle
 import com.moriafly.salt.ui.ItemValue
 import com.moriafly.salt.ui.RoundedColumn
 import com.moriafly.salt.ui.SaltUILogo
+import com.moriafly.salt.ui.TitleBar
 import com.moriafly.salt.ui.UnstableSaltApi
 import com.salt.video.BuildConfig
 import com.salt.video.R
@@ -20,11 +21,17 @@ fun MyScreen() {
         modifier = Modifier
             .fillMaxSize()
     ) {
+        TitleBar(
+            onBack = { },
+            text = stringResource(id = R.string.my),
+            showBackBtn = false
+        )
+
         SaltUILogo()
 
         RoundedColumn {
             ItemTitle(text = stringResource(id = R.string.app_name))
-            ItemValue(text = "版本", sub = "${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})" )
+            ItemValue(text = "版本", sub = "${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})")
         }
     }
 }

@@ -185,18 +185,14 @@ fun MainUI(
         val pagerState = rememberPagerState {
             2
         }
-        TitleBar(
-            onBack = { },
-            text = stringResource(id = if (pagerState.currentPage == 0) R.string.video else R.string.my),
-            showBackBtn = false
-        )
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
                 .weight(1f)
                 .fillMaxSize()
                 .background(SaltTheme.colors.background),
-            beyondBoundsPageCount = 1
+            beyondBoundsPageCount = 1,
+            userScrollEnabled = false
         ) {page ->
             when (page) {
                 0 -> VideoScreen(videoViewModel = videoViewModel)
@@ -209,7 +205,7 @@ fun MainUI(
                 state = pagerState.currentPage == 0,
                 onClick = {
                     scope.launch {
-                        pagerState.animateScrollToPage(0)
+                        pagerState.scrollToPage(0)
                     }
                 },
                 painter = painterResource(id = R.drawable.ic_main_bottom_video),
@@ -219,7 +215,7 @@ fun MainUI(
                 state = pagerState.currentPage == 1,
                 onClick = {
                     scope.launch {
-                        pagerState.animateScrollToPage(1)
+                        pagerState.scrollToPage(1)
                     }
                 },
                 painter = painterResource(id = R.drawable.ic_kayaking),
