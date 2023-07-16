@@ -19,33 +19,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.updateLayoutParams
 import androidx.documentfile.provider.DocumentFile
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
 import com.dylanc.activityresult.launcher.OpenDocumentLauncher
 import com.dylanc.activityresult.launcher.OpenDocumentTreeLauncher
 import com.kongzue.dialogx.dialogs.InputDialog
 import com.kongzue.dialogx.dialogs.MessageDialog
-import com.kongzue.dialogx.dialogs.PopMenu
 import com.moriafly.salt.ui.BottomBar
 import com.moriafly.salt.ui.BottomBarItem
 import com.moriafly.salt.ui.SaltTheme
-import com.moriafly.salt.ui.TitleBar
 import com.moriafly.salt.ui.UnstableSaltApi
 import com.salt.video.R
-import com.salt.video.databinding.ActivityMainBinding
-import com.salt.video.ui.main.my.MyFragment
 import com.salt.video.ui.main.my.MyScreen
-import com.salt.video.ui.main.video.VideoFragment
 import com.salt.video.ui.main.video.VideoScreen
 import com.salt.video.ui.main.video.VideoViewModel
 import com.salt.video.ui.player.PlayerActivity
 import com.salt.video.ui.theme.VideoTheme
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
