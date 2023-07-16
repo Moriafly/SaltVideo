@@ -67,7 +67,8 @@ fun QuickPlayDialog(
                     },
                     iconPainter = painterResource(id = R.drawable.ic_wifi_tethering),
                     iconColor = SaltTheme.colors.highlight,
-                    text = "单个网络音视频"
+                    text = "单个网络音视频",
+                    sub = "支持 HTTP / HTTPS / M3U8"
                 )
             }
             Spacer(modifier = Modifier.navigationBarsPadding())

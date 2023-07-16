@@ -33,8 +33,10 @@ import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.SaltUILogo
 import com.moriafly.salt.ui.TitleBar
 import com.moriafly.salt.ui.UnstableSaltApi
+import com.salt.video.App
 import com.salt.video.BuildConfig
 import com.salt.video.R
+import com.salt.video.util.Config
 
 @OptIn(UnstableSaltApi::class)
 @Composable
@@ -65,6 +67,19 @@ fun MyScreen() {
 
         RoundedColumn {
             ItemTitle(text = stringResource(id = R.string.video))
+
+            var mediaCodec by remember { mutableStateOf(App.mmkv.decodeBool(Config.MEDIA_CODEC, false)) }
+            ItemSwitcher(
+                state = mediaCodec,
+                onChange = {
+                    mediaCodec = it
+                    App.mmkv.encode(Config.MEDIA_CODEC, it)
+                },
+                text = "硬件解码",
+                iconPainter = painterResource(id = R.drawable.ic_cpu),
+                iconColor = Color(0xFFC9DD22)
+            )
+
             Item(
                 onClick = {
 
@@ -83,7 +98,7 @@ fun MyScreen() {
 
                 },
                 text = "软件使用条例",
-                iconPainter = painterResource(id = R.drawable.ic_copyright),
+                iconPainter = painterResource(id = R.drawable.ic_license),
                 iconColor = SaltTheme.colors.highlight
             )
 
@@ -92,7 +107,7 @@ fun MyScreen() {
 
                 },
                 text = "隐私协议",
-                iconPainter = painterResource(id = R.drawable.ic_copyright),
+                iconPainter = painterResource(id = R.drawable.ic_license),
                 iconColor = SaltTheme.colors.highlight
             )
 

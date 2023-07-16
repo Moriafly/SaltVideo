@@ -28,9 +28,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Lifecycle
 import com.blankj.utilcode.util.BarUtils
+import com.salt.video.App
 import com.salt.video.R
 import com.salt.video.core.PlayerState
 import com.salt.video.databinding.ActivityPlayerBinding
+import com.salt.video.util.Config
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -82,6 +84,12 @@ class PlayerActivity : AppCompatActivity() {
 
         // 支持 HDR https://developer.android.google.cn/guide/topics/media/hdr-playback#set_up_hdr_playback_in_your_app
         GSYVideoType.setRenderType(GSYVideoType.SUFRACE)
+        val mediaCodec = App.mmkv.decodeBool(Config.MEDIA_CODEC, false)
+        if (mediaCodec) {
+            GSYVideoType.enableMediaCodec()
+        } else {
+            GSYVideoType.disableMediaCodec()
+        }
 
         val radius = 25f
 
