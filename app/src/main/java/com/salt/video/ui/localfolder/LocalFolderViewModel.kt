@@ -71,19 +71,23 @@ class LocalFolderViewModel: ViewModel() {
                         val mimeType: String = cursor.getString(2)
                         val size = cursor.getLong(3)
                         val dateModified = cursor.getLong(4)
-                        // 如果是文件夹且文件夹不是隐藏文件夹（即不以 . 开头）
-                        if (isDirectory(mimeType) && !displayName.startsWith(".")) {
-                            val directoryUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
-                            folders.add(
-                                LocalFolder(displayName, directoryUri.toString())
-                            )
-                        } else {
-                            videos.add(
-                                Video(
-                                    url = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId).toString(),
-                                    title = displayName
+                        when {
+                            // 如果是文件夹且文件夹不是隐藏文件夹（即不以 . 开头）
+                            isDirectory(mimeType) && !displayName.startsWith(".") -> {
+                                val directoryUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
+                                folders.add(
+                                    LocalFolder(displayName, directoryUri.toString())
                                 )
-                            )
+                            }
+                            // 添加视频
+                            isVideo(mimeType) -> {
+                                videos.add(
+                                    Video(
+                                        url = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId).toString(),
+                                        title = displayName
+                                    )
+                                )
+                            }
                         }
                     } while (cursor.moveToNext())
                 }
@@ -101,6 +105,10 @@ class LocalFolderViewModel: ViewModel() {
      */
     private fun isDirectory(mimeType: String): Boolean {
         return mimeType == DocumentsContract.Document.MIME_TYPE_DIR
+    }
+
+    private fun isVideo(mimeType: String): Boolean {
+        return mimeType.startsWith("video/")
     }
 
 }
