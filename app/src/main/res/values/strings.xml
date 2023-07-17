@@ -7,4 +7,5 @@
     <string name="error">Error</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="file_list_show_hidden_folders">File list show hidden folders</string>
 </resources>

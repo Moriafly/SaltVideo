@@ -8,4 +8,5 @@
     <string name="error">错误</string>
     <string name="confirm">确认</string>
     <string name="cancel">取消</string>
+    <string name="file_list_show_hidden_folders">文件列表不显示隐藏文件夹</string>
 </resources>

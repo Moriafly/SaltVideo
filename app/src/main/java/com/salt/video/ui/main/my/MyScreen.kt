@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +29,6 @@ import com.moriafly.salt.ui.Item
 import com.moriafly.salt.ui.ItemSpacer
 import com.moriafly.salt.ui.ItemSwitcher
 import com.moriafly.salt.ui.ItemTitle
-import com.moriafly.salt.ui.ItemValue
 import com.moriafly.salt.ui.RoundedColumn
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.SaltUILogo
@@ -44,6 +45,7 @@ fun MyScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         TitleBar(
             onBack = { },
@@ -53,14 +55,30 @@ fun MyScreen() {
 
         RoundedColumn {
             ItemTitle(text = "资源")
+
+            var fileListShowHiddenFolders by remember {
+                mutableStateOf(App.mmkv.decodeBool(Config.FILE_LIST_SHOW_HIDDEN_FOLDERS, Config.FILE_LIST_SHOW_HIDDEN_FOLDERS_DEFAULT))
+            }
             ItemSwitcher(
-                state = true,
+                state = fileListShowHiddenFolders,
+                onChange = {
+                    fileListShowHiddenFolders = it
+                    App.mmkv.encode(Config.FILE_LIST_SHOW_HIDDEN_FOLDERS, it)
+                },
+                text = stringResource(id = R.string.file_list_show_hidden_folders),
+                sub = "显示以 . 开头的隐藏文件夹",
+                iconPainter = painterResource(id = R.drawable.ic_hide_video),
+                iconColor = Color(0xFF75878A)
+            )
+
+            ItemSwitcher(
+                state = false,
                 onChange = {
 
                 },
-                text = "文件列表不显示隐藏文件",
-                sub = "不显示以 . 开头的隐藏文件",
-                iconPainter = painterResource(id = R.drawable.ic_hide_source),
+                text = "文件列表显示隐藏文件",
+                sub = "显示以 . 开头的隐藏文件",
+                iconPainter = painterResource(id = R.drawable.ic_hide_file),
                 iconColor = Color(0xFF75878A)
             )
         }

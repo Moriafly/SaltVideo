@@ -8,7 +8,9 @@ import androidx.core.database.getStringOrNull
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.salt.video.App
 import com.salt.video.data.entry.Video
+import com.salt.video.util.Config
 import com.salt.video.util.DocumentFileUtil
 import com.salt.video.util.pinyinString
 import com.salt.video.util.sort.SimpleNaturalComparator
@@ -64,6 +66,7 @@ class LocalFolderViewModel: ViewModel() {
                     // TODO error
                 }
                 else -> {
+                    val fileListShowHiddenFolders = App.mmkv.decodeBool(Config.FILE_LIST_SHOW_HIDDEN_FOLDERS, Config.FILE_LIST_SHOW_HIDDEN_FOLDERS_DEFAULT)
                     do {
                         val documentId = cursor.getString(0)
                         // displayName 可能为 null java.lang.NullPointerException: cursor.getString(1) must not be null
@@ -72,12 +75,17 @@ class LocalFolderViewModel: ViewModel() {
                         val size = cursor.getLong(3)
                         val dateModified = cursor.getLong(4)
                         when {
-                            // 如果是文件夹且文件夹不是隐藏文件夹（即不以 . 开头）
-                            isDirectory(mimeType) && !displayName.startsWith(".") -> {
-                                val directoryUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
-                                folders.add(
-                                    LocalFolder(displayName, directoryUri.toString())
-                                )
+                            isDirectory(mimeType) -> {
+                                // 判断是否是隐藏文件夹
+                                if (displayName.startsWith(".")) {
+                                    if (fileListShowHiddenFolders) {
+                                        val directoryUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
+                                        folders.add(LocalFolder(displayName, directoryUri.toString()))
+                                    }
+                                } else {
+                                    val directoryUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
+                                    folders.add(LocalFolder(displayName, directoryUri.toString()))
+                                }
                             }
                             // 添加视频
                             isVideo(mimeType) -> {
