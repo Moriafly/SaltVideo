@@ -71,16 +71,16 @@ fun MyScreen() {
                 iconColor = Color(0xFF75878A)
             )
 
-            ItemSwitcher(
-                state = false,
-                onChange = {
-
-                },
-                text = "文件列表显示隐藏文件",
-                sub = "显示以 . 开头的隐藏文件",
-                iconPainter = painterResource(id = R.drawable.ic_hide_file),
-                iconColor = Color(0xFF75878A)
-            )
+//            ItemSwitcher(
+//                state = false,
+//                onChange = {
+//
+//                },
+//                text = "文件列表显示隐藏文件",
+//                sub = "显示以 . 开头的隐藏文件",
+//                iconPainter = painterResource(id = R.drawable.ic_hide_file),
+//                iconColor = Color(0xFF75878A)
+//            )
         }
 
         RoundedColumn {
@@ -98,36 +98,36 @@ fun MyScreen() {
                 iconColor = Color(0xFFC9DD22)
             )
 
-            Item(
-                onClick = {
-
-                },
-                text = "渲染控件",
-                sub = "SurfaceView",
-                iconPainter = painterResource(id = R.drawable.ic_loading),
-                iconColor = Color(0xFF1BD1A5)
-            )
+//            Item(
+//                onClick = {
+//
+//                },
+//                text = "渲染控件",
+//                sub = "SurfaceView",
+//                iconPainter = painterResource(id = R.drawable.ic_loading),
+//                iconColor = Color(0xFF1BD1A5)
+//            )
         }
 
         RoundedColumn {
             ItemTitle(text = "法律信息")
-            Item(
-                onClick = {
-
-                },
-                text = "软件使用条例",
-                iconPainter = painterResource(id = R.drawable.ic_license),
-                iconColor = SaltTheme.colors.highlight
-            )
-
-            Item(
-                onClick = {
-
-                },
-                text = "隐私协议",
-                iconPainter = painterResource(id = R.drawable.ic_license),
-                iconColor = SaltTheme.colors.highlight
-            )
+//            Item(
+//                onClick = {
+//
+//                },
+//                text = "软件使用条例",
+//                iconPainter = painterResource(id = R.drawable.ic_license),
+//                iconColor = SaltTheme.colors.highlight
+//            )
+//
+//            Item(
+//                onClick = {
+//
+//                },
+//                text = "隐私协议",
+//                iconPainter = painterResource(id = R.drawable.ic_license),
+//                iconColor = SaltTheme.colors.highlight
+//            )
 
             var openSourceDialog by remember { mutableStateOf(false) }
             Item(
