@@ -78,7 +78,8 @@ dependencies {
     implementation "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:$gsy_video_player_version"
     implementation "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:$gsy_video_player_version"
 
-    implementation 'com.github.DylanCaiCoding:ActivityResultLauncher:1.1.2'
+    // implementation 'com.github.DylanCaiCoding:ActivityResultLauncher:1.1.2'
+    implementation 'com.github.DylanCaiCoding:Callbacks:1.0.0'
     implementation('com.blankj:utilcodex:1.31.1')
     implementation 'com.github.Dimezis:BlurView:version-2.0.3'
 
