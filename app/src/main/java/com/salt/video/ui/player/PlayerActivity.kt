@@ -186,10 +186,11 @@ class PlayerActivity : AppCompatActivity() {
             }
 
             ivRotation.setOnClickListener {
+                playerViewModel.userScreenRotation = true
                 if (this@PlayerActivity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT) {
-                    this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE)
+                    this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
                 } else {
-                    this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT)
+                    this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
                 }
             }
 
@@ -218,11 +219,15 @@ class PlayerActivity : AppCompatActivity() {
                 }
             }
             saltVideoPlayer.onVideoSizeChangeListener = { width: Int, height: Int, numerator: Int, denominator: Int ->
-                Log.d(TAG, "video w = $width, h = $height")
-                if (width > height) {
-                    this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-                } else {
-                    this@PlayerActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT)
+                Log.d(TAG, "video w = $width, h = $height, userScreenRotation = ${playerViewModel.userScreenRotation}")
+                if (!playerViewModel.userScreenRotation) {
+                    if (width > height) {
+                        Log.d(TAG, "requestedOrientation ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE")
+                        this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                    } else {
+                        Log.d(TAG, "requestedOrientation ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT")
+                        this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+                    }
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     setPictureInPictureParams(
