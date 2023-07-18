@@ -84,7 +84,7 @@ class PlayerActivity : AppCompatActivity() {
 
         // 支持 HDR https://developer.android.google.cn/guide/topics/media/hdr-playback#set_up_hdr_playback_in_your_app
         GSYVideoType.setRenderType(GSYVideoType.SUFRACE)
-        val mediaCodec = App.mmkv.decodeBool(Config.MEDIA_CODEC, false)
+        val mediaCodec = App.mmkv.decodeBool(Config.MEDIA_CODEC, Config.MEDIA_CODEC_DEFAULT)
         if (mediaCodec) {
             GSYVideoType.enableMediaCodec()
         } else {

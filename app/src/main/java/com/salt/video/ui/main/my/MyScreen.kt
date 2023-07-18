@@ -107,7 +107,7 @@ fun ColumnScope.MyScreenContent() {
         RoundedColumn {
             ItemTitle(text = stringResource(id = R.string.video))
 
-            var mediaCodec by remember { mutableStateOf(App.mmkv.decodeBool(Config.MEDIA_CODEC, false)) }
+            var mediaCodec by remember { mutableStateOf(App.mmkv.decodeBool(Config.MEDIA_CODEC, Config.MEDIA_CODEC_DEFAULT)) }
             ItemSwitcher(
                 state = mediaCodec,
                 onChange = {
