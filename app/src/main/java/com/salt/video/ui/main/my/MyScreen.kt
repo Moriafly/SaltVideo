@@ -2,6 +2,7 @@ package com.salt.video.ui.main.my
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.moriafly.salt.ui.Item
 import com.moriafly.salt.ui.ItemSpacer
 import com.moriafly.salt.ui.ItemSwitcher
+import com.moriafly.salt.ui.ItemText
 import com.moriafly.salt.ui.ItemTitle
 import com.moriafly.salt.ui.RoundedColumn
 import com.moriafly.salt.ui.SaltTheme
@@ -52,6 +54,25 @@ fun MyScreen() {
             text = stringResource(id = R.string.my),
             showBackBtn = false
         )
+        MyScreenContent()
+    }
+}
+
+@OptIn(UnstableSaltApi::class)
+@Composable
+fun ColumnScope.MyScreenContent() {
+    Column(
+        modifier = Modifier
+            .weight(1f)
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        RoundedColumn {
+            ItemTitle(text = "椒盐视频开发体验版本")
+            ItemSpacer()
+            ItemText(text = "此为开发体验版本，所有功能都可能在后续版本变更或移除")
+            ItemSpacer()
+        }
 
         RoundedColumn {
             ItemTitle(text = "资源")

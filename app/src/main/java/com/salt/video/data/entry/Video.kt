@@ -16,4 +16,7 @@ data class Video(
     /** 标题 */
     val title: String,
 
+    /** 编辑时间 */
+    val dateModified: Long
+
 )

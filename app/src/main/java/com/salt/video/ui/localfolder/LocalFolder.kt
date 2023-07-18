@@ -7,15 +7,17 @@ import androidx.documentfile.provider.DocumentFile
 
 data class LocalFolder(
     val name: String,
-    val url: String
+    val url: String,
+    val dateModified: Long
 )
 
-fun DocumentFile.toLocalFolder(treeUri: Uri): LocalFolder {
-    val documentId = DocumentsContract.getDocumentId(uri)
-    val url = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId).toString()
-    Log.d("DocumentFile.toLocalFolder", "documentId = $documentId, url = $url")
-    return LocalFolder(
-        name = name ?: "",
-        url = url
-    )
-}
+//fun DocumentFile.toLocalFolder(treeUri: Uri): LocalFolder {
+//    val documentId = DocumentsContract.getDocumentId(uri)
+//    val url = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId).toString()
+//    Log.d("DocumentFile.toLocalFolder", "documentId = $documentId, url = $url")
+//    return LocalFolder(
+//        name = name ?: "",
+//        url = url,
+//        dateModified = this.
+//    )
+//}

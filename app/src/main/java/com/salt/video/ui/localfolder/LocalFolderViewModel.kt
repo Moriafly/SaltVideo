@@ -80,11 +80,19 @@ class LocalFolderViewModel: ViewModel() {
                                 if (displayName.startsWith(".")) {
                                     if (fileListShowHiddenFolders) {
                                         val directoryUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
-                                        folders.add(LocalFolder(displayName, directoryUri.toString()))
+                                        folders.add(
+                                            LocalFolder(
+                                                displayName, directoryUri.toString(), dateModified
+                                            )
+                                        )
                                     }
                                 } else {
                                     val directoryUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
-                                    folders.add(LocalFolder(displayName, directoryUri.toString()))
+                                    folders.add(
+                                        LocalFolder(
+                                            displayName, directoryUri.toString(), dateModified
+                                        )
+                                    )
                                 }
                             }
                             // 添加视频
@@ -92,7 +100,8 @@ class LocalFolderViewModel: ViewModel() {
                                 videos.add(
                                     Video(
                                         url = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId).toString(),
-                                        title = displayName
+                                        title = displayName,
+                                        dateModified = dateModified
                                     )
                                 )
                             }

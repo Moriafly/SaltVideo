@@ -1,5 +1,6 @@
 package com.salt.video.ui.localfolder
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -46,6 +47,8 @@ import com.salt.video.ui.main.MainActivity
 import com.salt.video.ui.player.PlayerActivity
 import com.salt.video.ui.theme.VideoTheme
 import com.skydoves.landscapist.glide.GlideImage
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class LocalFolderActivity : AppCompatActivity() {
 
@@ -241,7 +244,8 @@ private fun FileItem(file: Any) {
                 },
                 iconPainter = painterResource(id = R.drawable.ic_folder),
                 iconColor = SaltTheme.colors.highlight,
-                text = file.name
+                text = file.name,
+                sub = file.dateModified.toDateTimeFormat()
             )
         }
 
@@ -261,11 +265,29 @@ private fun FileItem(file: Any) {
                         .size(135.dp, 90.dp)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = file.title,
-                    style = SaltTheme.textStyles.main
-                )
+                Column {
+                    Text(
+                        text = file.title,
+                        style = SaltTheme.textStyles.main
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = file.dateModified.toDateTimeFormat(),
+                        style = SaltTheme.textStyles.sub
+                    )
+                }
             }
         }
     }
+}
+
+/**
+ * 转换成日期时间格式
+ */
+@SuppressLint("SimpleDateFormat")
+fun Long.toDateTimeFormat(): String {
+    val date = Date().apply {
+        time = this@toDateTimeFormat
+    }
+    return SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(date)
 }
