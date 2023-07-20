@@ -135,8 +135,11 @@ class PlayerActivity : AppCompatActivity() {
             .setFrameClearDrawable(windowBackground) // Optional
             .setBlurRadius(radius)
 
-        val clBottomBar = findViewById<ConstraintLayout>(R.id.clBottomBar)
         binding.blurViewBottomBar.setupWith(flShot, RenderScriptBlur(this)) // or RenderEffectBlur
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
+
+        binding.blurViewPanel.setupWith(flShot, RenderScriptBlur(this)) // or RenderEffectBlur
             .setFrameClearDrawable(windowBackground) // Optional
             .setBlurRadius(radius)
 
@@ -166,6 +169,10 @@ class PlayerActivity : AppCompatActivity() {
     private fun initView() {
         with(binding) {
 
+            flPanel.setOnClickListener {
+                llPanel.visibility = View.GONE
+            }
+
             composeViewTitleBar.setContent {
                 TitleBarUI(
                     onBack = {
@@ -184,23 +191,26 @@ class PlayerActivity : AppCompatActivity() {
                             saltVideoPlayer.onVideoResume()
                         }
                     },
+                    onSpeedClick = {
+                        hideTitleAndBottomBar()
+                        llPanel.visibility = View.VISIBLE
+                        playerViewModel.playerPanel = PlayerPanel.SPEED
+                    },
+                    onPictureInPictureClick = {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            this@PlayerActivity.enterPictureInPictureMode()
+                        }
+                    },
+                    onScreenRotationClick = {
+                        playerViewModel.userScreenRotation = true
+                        if (this@PlayerActivity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT) {
+                            this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                        } else {
+                            this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+                        }
+                    },
                     playerViewModel = playerViewModel
                 )
-            }
-
-            ivPictureInPicture.setOnClickListener {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    this@PlayerActivity.enterPictureInPictureMode()
-                }
-            }
-
-            ivRotation.setOnClickListener {
-                playerViewModel.userScreenRotation = true
-                if (this@PlayerActivity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT) {
-                    this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-                } else {
-                    this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
-                }
             }
 
             // Listener is called immediately after the user exits PiP but before animating.

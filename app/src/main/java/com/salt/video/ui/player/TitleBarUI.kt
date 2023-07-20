@@ -24,6 +24,7 @@ import com.moriafly.salt.ui.UnstableSaltApi
 import com.moriafly.salt.ui.darkSaltColors
 import com.moriafly.salt.ui.fadeClickable
 import com.salt.video.R
+import com.salt.video.ui.theme.VideoTheme
 
 @OptIn(UnstableSaltApi::class)
 @Composable
@@ -31,9 +32,7 @@ fun TitleBarUI(
     onBack: () -> Unit,
     playerViewModel: PlayerViewModel
 ) {
-    SaltTheme(
-        colors = darkSaltColors()
-    ) {
+    VideoTheme(darkTheme = true) {
         Row(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
