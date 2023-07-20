@@ -1,14 +1,18 @@
 package com.salt.video.ui.main.my
 
-import androidx.compose.foundation.background
+import android.app.Activity
+import android.content.Intent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -23,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,12 +38,11 @@ import com.moriafly.salt.ui.ItemText
 import com.moriafly.salt.ui.ItemTitle
 import com.moriafly.salt.ui.RoundedColumn
 import com.moriafly.salt.ui.SaltTheme
-import com.moriafly.salt.ui.SaltUILogo
 import com.moriafly.salt.ui.TitleBar
 import com.moriafly.salt.ui.UnstableSaltApi
 import com.salt.video.App
-import com.salt.video.BuildConfig
 import com.salt.video.R
+import com.salt.video.ui.about.AboutActivity
 import com.salt.video.util.Config
 
 @OptIn(UnstableSaltApi::class)
@@ -67,12 +71,8 @@ fun ColumnScope.MyScreenContent() {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        RoundedColumn {
-            ItemTitle(text = "椒盐视频开发体验版本")
-            ItemSpacer()
-            ItemText(text = "此为开发体验版本，所有功能都可能在后续版本变更或移除，加入 QQ 群聊 639298754")
-            ItemSpacer()
-        }
+        Spacer(modifier = Modifier.height(8.dp))
+        UserItem()
 
         RoundedColumn {
             ItemTitle(text = "资源")
@@ -130,73 +130,65 @@ fun ColumnScope.MyScreenContent() {
 //            )
         }
 
+        val activity = LocalContext.current as Activity
         RoundedColumn {
-            ItemTitle(text = "法律信息")
-//            Item(
-//                onClick = {
-//
-//                },
-//                text = "软件使用条例",
-//                iconPainter = painterResource(id = R.drawable.ic_license),
-//                iconColor = SaltTheme.colors.highlight
-//            )
-//
-//            Item(
-//                onClick = {
-//
-//                },
-//                text = "隐私协议",
-//                iconPainter = painterResource(id = R.drawable.ic_license),
-//                iconColor = SaltTheme.colors.highlight
-//            )
-
-            var openSourceDialog by remember { mutableStateOf(false) }
             Item(
                 onClick = {
-                    openSourceDialog = true
+                    activity.startActivity(Intent(activity, AboutActivity::class.java))
                 },
-                text = "开放源代码许可",
-                iconPainter = painterResource(id = R.drawable.ic_copyright),
-                iconColor = SaltTheme.colors.highlight
+                iconPainter = painterResource(id = R.drawable.ic_about),
+                iconColor = SaltTheme.colors.highlight,
+                text = "关于"
             )
-            if (openSourceDialog) {
-                OpenSourceDialog(
-                    onDismissRequest = {
-                        openSourceDialog = false
-                    }
-                )
-            }
         }
 
-        SaltUILogo()
+        RoundedColumn {
+            ItemTitle(text = "椒盐视频开发体验版本")
+            ItemSpacer()
+            ItemText(text = "此为开发体验版本，所有功能都可能在后续版本变更或移除，加入 QQ 群聊 639298754")
+            ItemSpacer()
+        }
+    }
+}
 
+@Composable
+private fun UserItem() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp, 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_avatar_test),
+            contentDescription = null,
+            modifier = Modifier
+                .size(56.dp)
+                .clip(CircleShape)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .weight(1f)
+                .fillMaxWidth()
         ) {
-            ItemSpacer()
-            Icon(
-                painter = painterResource(id = R.drawable.ic_salt_video),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(color = SaltTheme.colors.highlight)
-                    .padding(10.dp),
-                tint = Color.White
-            )
-            ItemSpacer()
             Text(
-                text = "${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})",
-                style = SaltTheme.textStyles.sub
+                text = "不要糖醋放椒盐",
+                style = SaltTheme.textStyles.main
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "Copyright © 2022-2023 Moriafly. All Rights Reserved.",
+                text = "Love",
                 style = SaltTheme.textStyles.sub
             )
-            ItemSpacer()
         }
+        Spacer(modifier = Modifier.width(8.dp))
+        Icon(
+            painter = painterResource(id = com.moriafly.salt.ui.R.drawable.ic_chevron_right),
+            contentDescription = null,
+            modifier = Modifier
+                .size(20.dp),
+            tint = SaltTheme.colors.subText.copy(alpha = 0.5f)
+        )
     }
 }

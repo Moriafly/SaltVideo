@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -13,12 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.documentfile.provider.DocumentFile
 import com.dylanc.activityresult.launcher.OpenDocumentLauncher
 import com.dylanc.activityresult.launcher.OpenDocumentTreeLauncher
@@ -181,6 +184,13 @@ fun MainUI(
                 .fillMaxSize()
                 .background(SaltTheme.colors.background),
             beyondBoundsPageCount = 1,
+            flingBehavior = PagerDefaults.flingBehavior(
+                state = pagerState,
+                snapAnimationSpec = spring(stiffness = 500f),
+                lowVelocityAnimationSpec = spring(stiffness = 500f),
+                snapVelocityThreshold = Int.MAX_VALUE.dp,
+                snapPositionalThreshold = 0.1f
+            ),
             userScrollEnabled = true
         ) {page ->
             when (page) {

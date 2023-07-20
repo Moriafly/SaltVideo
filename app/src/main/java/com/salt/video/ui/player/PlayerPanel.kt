@@ -193,6 +193,7 @@ private fun SpeedPanel(
             onChange = {
 
             },
+            enabled = false,
             text = "变速不变调"
         )
 

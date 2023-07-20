@@ -17,6 +17,9 @@
             android:name=".ui.localfolder.LocalFolderActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.about.AboutActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.player.PlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:exported="true"
