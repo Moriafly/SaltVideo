@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Build
@@ -76,6 +77,9 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        BarUtils.setNavBarColor(this, Color.BLACK)
+        BarUtils.setNavBarLightMode(this, true)
 
         // 使用 Exo2 内核
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
@@ -171,12 +175,17 @@ class PlayerActivity : AppCompatActivity() {
                 )
             }
 
-            ivPlayerState.setOnClickListener {
-                if (saltVideoPlayer.gsyVideoManager.isPlaying) {
-                    saltVideoPlayer.onVideoPause()
-                } else {
-                    saltVideoPlayer.onVideoResume()
-                }
+            composeViewBottomBar.setContent {
+                BottomBarUI(
+                    onPlayPauseClick = {
+                        if (saltVideoPlayer.gsyVideoManager.isPlaying) {
+                            saltVideoPlayer.onVideoPause()
+                        } else {
+                            saltVideoPlayer.onVideoResume()
+                        }
+                    },
+                    playerViewModel = playerViewModel
+                )
             }
 
             ivPictureInPicture.setOnClickListener {
@@ -213,10 +222,7 @@ class PlayerActivity : AppCompatActivity() {
 //                }
 //            }
             saltVideoPlayer.onPlayerStateChange = {
-                when (it) {
-                    PlayerState.RESUME -> ivPlayerState.setImageResource(R.drawable.ic_pause)
-                    PlayerState.PAUSE -> ivPlayerState.setImageResource(R.drawable.ic_play)
-                }
+                playerViewModel.playerState = it
             }
             saltVideoPlayer.onVideoSizeChangeListener = { width: Int, height: Int, numerator: Int, denominator: Int ->
                 Log.d(TAG, "video w = $width, h = $height, userScreenRotation = ${playerViewModel.userScreenRotation}")

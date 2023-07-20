@@ -69,23 +69,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/composeViewBottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="64dp" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clBottomBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="4dp">
-
-            <ImageView
-                android:id="@+id/ivPlayerState"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="12dp"
-                android:src="@drawable/ic_pause"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:tint="@color/white" />
 
             <ImageView
                 android:id="@+id/ivPictureInPicture"

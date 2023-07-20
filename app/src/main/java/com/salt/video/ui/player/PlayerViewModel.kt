@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.salt.video.core.PlayerState
 
 class PlayerViewModel : ViewModel() {
 
@@ -11,6 +12,8 @@ class PlayerViewModel : ViewModel() {
     var userScreenRotation = false
 
     var title by mutableStateOf<String?>(null)
+
+    var playerState by mutableStateOf(PlayerState.PAUSE)
 
     fun postTitle(value: String) {
         title = value
