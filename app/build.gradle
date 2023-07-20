@@ -38,11 +38,18 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            applicationIdSuffix '.debug'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
         android.applicationVariants.all { variant ->
             variant.outputs.all {
                 outputFileName = "SaltVideo-${defaultConfig.versionName}-${defaultConfig.versionCode}.apk"
