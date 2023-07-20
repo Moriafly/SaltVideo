@@ -51,11 +51,16 @@ class PlayerActivity : AppCompatActivity() {
     /** 标题栏和底部操作栏是否处于显示状态 */
     private var titleAndBottomBarVisibility = false
 
+    private var panelVisibility = false
+
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 HANDLER_MSG_SHOT_PIC -> {
-                    if (titleAndBottomBarVisibility && binding.saltVideoPlayer.currentVideoHeight > 0 && binding.saltVideoPlayer.currentVideoWidth > 0) {
+                    if (
+                        (titleAndBottomBarVisibility || panelVisibility)
+                        && binding.saltVideoPlayer.currentVideoHeight > 0 && binding.saltVideoPlayer.currentVideoWidth > 0
+                    ) {
                         binding.saltVideoPlayer.taskShotPic { bitmap ->
                             ivShotPic.setImageBitmap(bitmap)
                             sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
@@ -170,7 +175,7 @@ class PlayerActivity : AppCompatActivity() {
         with(binding) {
 
             flPanel.setOnClickListener {
-                llPanel.visibility = View.GONE
+                hidePanel()
             }
 
             composeViewTitleBar.setContent {
@@ -193,8 +198,8 @@ class PlayerActivity : AppCompatActivity() {
                     },
                     onSpeedClick = {
                         hideTitleAndBottomBar()
-                        llPanel.visibility = View.VISIBLE
-                        playerViewModel.playerPanel = PlayerPanel.SPEED
+                        showPanel()
+                        playerViewModel.playerPanelState = PlayerPanelState.SPEED
                     },
                     onPictureInPictureClick = {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -208,6 +213,16 @@ class PlayerActivity : AppCompatActivity() {
                         } else {
                             this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
                         }
+                    },
+                    playerViewModel = playerViewModel
+                )
+            }
+
+            composeViewPanel.setContent {
+                PlayerPanel(
+                    onSpeedChange = {
+                        saltVideoPlayer.speed = it
+                        App.mmkv.encode(Config.PLAYER_SPEED, it)
                     },
                     playerViewModel = playerViewModel
                 )
@@ -231,45 +246,55 @@ class PlayerActivity : AppCompatActivity() {
 //                    }
 //                }
 //            }
-            saltVideoPlayer.onPlayerStateChange = {
-                playerViewModel.playerState = it
-            }
-            saltVideoPlayer.onVideoSizeChangeListener = { width: Int, height: Int, numerator: Int, denominator: Int ->
-                Log.d(TAG, "video w = $width, h = $height, userScreenRotation = ${playerViewModel.userScreenRotation}")
-                if (!playerViewModel.userScreenRotation) {
-                    if (width > height) {
-                        Log.d(TAG, "requestedOrientation ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE")
-                        this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-                    } else {
-                        Log.d(TAG, "requestedOrientation ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT")
-                        this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
-                    }
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    setPictureInPictureParams(
-                        PictureInPictureParams.Builder()
-                            .setAspectRatio(Rational(width, height))
-                            .build()
-                    )
-                }
-                handler.sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
-            }
-            saltVideoPlayer.onSetProgressAndTime = { currentTime, totalTime ->
-                seekBar.max = totalTime.toInt()
-                seekBar.progress = currentTime.toInt()
-                tvProgress.text = currentTime.toTimeFormat()
-                tvDuration.text = totalTime.toTimeFormat()
-            }
 
             hideTitleAndBottomBar()
-            saltVideoPlayer.onClickUiToggle = {
-                if (titleAndBottomBarVisibility) {
-                    hideTitleAndBottomBar()
-                } else {
-                    showTitleAndBottomBar()
-                }
-            }
 
+            saltVideoPlayer.apply {
+                onPrepared = {
+                    speed = App.mmkv.decodeFloat(Config.PLAYER_SPEED, 1f)
+                }
+                onPlayerStateChange = {
+                    playerViewModel.playerState = it
+                }
+                onVideoSizeChangeListener = { width: Int, height: Int, numerator: Int, denominator: Int ->
+                    Log.d(TAG, "video w = $width, h = $height, userScreenRotation = ${playerViewModel.userScreenRotation}")
+                    if (!playerViewModel.userScreenRotation) {
+                        if (width > height) {
+                            Log.d(TAG, "requestedOrientation ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE")
+                            this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                        } else {
+                            Log.d(TAG, "requestedOrientation ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT")
+                            this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+                        }
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        setPictureInPictureParams(
+                            PictureInPictureParams.Builder()
+                                .setAspectRatio(Rational(width, height))
+                                .build()
+                        )
+                    }
+                    handler.sendEmptyMessageDelayed(HANDLER_MSG_SHOT_PIC, HANDLER_MSG_SHOT_PIC_DELAY)
+                }
+                onSetProgressAndTime = { currentTime, totalTime ->
+                    seekBar.max = totalTime.toInt()
+                    seekBar.progress = currentTime.toInt()
+                    tvProgress.text = currentTime.toTimeFormat()
+                    tvDuration.text = totalTime.toTimeFormat()
+                }
+                onClickUiToggle = {
+                    if (titleAndBottomBarVisibility) {
+                        hideTitleAndBottomBar()
+                    } else {
+                        showTitleAndBottomBar()
+                    }
+                }
+                onLongTouchUp = {
+                    saltVideoPlayer.speed = App.mmkv.decodeFloat(Config.PLAYER_SPEED, 1f)
+                }
+
+                speed = App.mmkv.decodeFloat(Config.PLAYER_SPEED, 1f)
+            }
 
             seekBar.thumb = ContextCompat.getDrawable(this@PlayerActivity, R.drawable.ic_orange)
             // seekBar.thumb.colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC)
@@ -301,6 +326,19 @@ class PlayerActivity : AppCompatActivity() {
 
             })
         }
+    }
+
+    private fun hidePanel() {
+        binding.llPanel.visibility = View.INVISIBLE
+        panelVisibility = false
+        handler.removeMessages(HANDLER_MSG_SHOT_PIC)
+    }
+
+    private fun showPanel() {
+        binding.llPanel.visibility = View.VISIBLE
+        panelVisibility = true
+        handler.sendEmptyMessageDelayed(HANDLER_MSG_HIDE_UI, HANDLER_MSG_HIDE_UI_DELAY)
+        handler.sendEmptyMessage(HANDLER_MSG_SHOT_PIC)
     }
 
     private fun hideTitleAndBottomBar() {
@@ -387,8 +425,13 @@ class PlayerActivity : AppCompatActivity() {
 //        saltVideoPlayer = findViewById<SaltVideoPlayer>(R.id.saltVideoPlayer)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        super.onBackPressed()
+        if (panelVisibility) {
+            hidePanel()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onDestroy() {

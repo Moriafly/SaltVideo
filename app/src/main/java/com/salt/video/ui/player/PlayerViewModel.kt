@@ -15,17 +15,10 @@ class PlayerViewModel : ViewModel() {
 
     var playerState by mutableStateOf(PlayerState.PAUSE)
 
-    var playerPanel by mutableStateOf(PlayerPanel.NONE)
+    var playerPanelState by mutableStateOf(PlayerPanelState.NONE)
 
     fun postTitle(value: String) {
         title = value
     }
 
-
-
-}
-
-enum class PlayerPanel {
-    NONE,
-    SPEED
 }

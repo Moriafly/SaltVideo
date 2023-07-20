@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
+import com.salt.video.App
 import com.salt.video.R
+import com.salt.video.util.Config
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 
 /**
@@ -29,8 +31,21 @@ class SaltVideoPlayer: StandardGSYVideoPlayer {
 
     var onSetProgressAndTime: (currentTime: Long, totalTime: Long) -> Unit = { _, _ -> }
 
+    var onLongTouchUp: () -> Unit = {}
+
+    var onPrepared: () -> Unit = {}
+
     /** 是否正在使用手势拖动 */
     private var isDragSeeking = false
+
+    override fun onPrepared() {
+        super.onPrepared()
+        onPrepared.invoke()
+    }
+
+    override fun startAfterPrepared() {
+        super.startAfterPrepared()
+    }
 
     override fun getLayoutId(): Int {
         return R.layout.layout_salt_video_player
@@ -107,7 +122,7 @@ class SaltVideoPlayer: StandardGSYVideoPlayer {
         super.touchSurfaceUp()
         if (isLongPressSpeed) {
             isLongPressSpeed = false
-            speed = 1f
+            onLongTouchUp()
         }
         Log.d(TAG, "touchSurfaceUp()")
     }

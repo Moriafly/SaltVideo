@@ -12,4 +12,6 @@ object Config {
     const val FILE_LIST_SHOW_HIDDEN_FILES = "file_list_show_hidden_files"
     const val FILE_LIST_SHOW_HIDDEN_FILES_DEFAULT = false
 
+    const val PLAYER_SPEED = "player_speed"
+
 }
