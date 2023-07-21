@@ -136,7 +136,7 @@ dependencies {
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.activity:activity-compose:1.6.1'
 
-    implementation("com.github.Moriafly:SaltUI:0.1.0-dev12")
+    implementation("com.github.Moriafly:SaltUI:0.1.0-dev14")
 
     implementation("com.tencent:mmkv-static:1.2.13")
     implementation 'com.github.1552980358:C2Pinyin:2.3.3'
