@@ -88,13 +88,6 @@ fun ColumnScope.MyScreenContent() {
                 text = "关于"
             )
         }
-
-        RoundedColumn {
-            ItemTitle(text = "椒盐视频开发体验版本")
-            ItemSpacer()
-            ItemText(text = "此为开发体验版本，所有功能都可能在后续版本变更或移除，加入 QQ 群聊 639298754")
-            ItemSpacer()
-        }
     }
 }
 
