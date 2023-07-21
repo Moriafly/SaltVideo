@@ -19,31 +19,26 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moriafly.salt.ui.Item
 import com.moriafly.salt.ui.ItemSpacer
-import com.moriafly.salt.ui.ItemSwitcher
 import com.moriafly.salt.ui.ItemText
 import com.moriafly.salt.ui.ItemTitle
 import com.moriafly.salt.ui.RoundedColumn
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.TitleBar
 import com.moriafly.salt.ui.UnstableSaltApi
-import com.salt.video.App
+import com.moriafly.salt.ui.noRippleClickable
 import com.salt.video.R
 import com.salt.video.ui.about.AboutActivity
-import com.salt.video.util.Config
+import com.salt.video.ui.settings.SettingsActivity
+import com.salt.video.ui.user.UserLoginActivity
 
 @OptIn(UnstableSaltApi::class)
 @Composable
@@ -105,9 +100,13 @@ fun ColumnScope.MyScreenContent() {
 
 @Composable
 private fun UserItem() {
+    val activity = LocalContext.current as Activity
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .noRippleClickable {
+                activity.startActivity(Intent(activity, UserLoginActivity::class.java))
+            }
             .padding(16.dp, 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
