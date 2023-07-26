@@ -52,7 +52,8 @@ fun AddMediaSourceDialog(
                     },
                     iconPainter = painterResource(id = R.drawable.ic_cloud),
                     iconColor = SaltTheme.colors.highlight,
-                    text = "WebDAV 服务器"
+                    text = "WebDAV 服务器",
+                    sub = "开发中..."
                 )
             }
             Spacer(modifier = Modifier.navigationBarsPadding())

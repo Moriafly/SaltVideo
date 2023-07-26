@@ -66,8 +66,8 @@ fun ColumnScope.MyScreenContent() {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        Spacer(modifier = Modifier.height(8.dp))
-        UserItem()
+//        Spacer(modifier = Modifier.height(8.dp))
+//        UserItem()
 
         val activity = LocalContext.current as Activity
         RoundedColumn {

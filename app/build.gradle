@@ -11,11 +11,11 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.xuncorp.suvie.video"
+        applicationId "com.salt.video"
         minSdk 24
         targetSdk 33
         versionCode gitCommits
-        versionName "0.1.230718-build"
+        versionName "0.1.230726-build"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
