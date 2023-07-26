@@ -128,6 +128,34 @@
 
     </eightbitlab.com.blurview.BlurView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewFloat"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cardBackgroundColor="#00FFFFFF"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="20dp">
+
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/blurViewFloat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:blurOverlayColor="#80000000" />
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/composeViewFloat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.cardview.widget.CardView>
+
+
+
     <LinearLayout
         android:visibility="invisible"
         android:id="@+id/llPanel"

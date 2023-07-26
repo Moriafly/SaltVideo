@@ -113,7 +113,7 @@ class LocalFolderViewModel: ViewModel() {
 
             val sortedFolders = folders.sortedWith { o1, o2 -> SimpleNaturalComparator.getInstance<String>().compare(o1.name.pinyinString, o2.name.pinyinString) }
             val sortedVideos = videos.sortedWith { o1, o2 -> SimpleNaturalComparator.getInstance<String>().compare(o1.title.pinyinString, o2.title.pinyinString) }
-            _files.emit(sortedFolders + sortedVideos)
+            _files.emit(sortedVideos + sortedFolders)
         }
     }
 

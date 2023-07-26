@@ -15,7 +15,7 @@ android {
         minSdk 24
         targetSdk 33
         versionCode gitCommits
-        versionName "0.5.0-build"
+        versionName "0.1.230718-build"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -64,6 +64,12 @@ android {
 
     kotlinOptions {
         jvmTarget = '17'
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/NOTICE.md'
     }
 }
 
@@ -135,9 +141,15 @@ dependencies {
     // such as input and measurement/layout
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.activity:activity-compose:1.6.1'
-
     implementation("com.github.Moriafly:SaltUI:0.1.0-dev14")
 
     implementation("com.tencent:mmkv-static:1.2.13")
     implementation 'com.github.1552980358:C2Pinyin:2.3.3'
+    // WebDAV
+    // implementation("com.github.thegrizzlylabs:sardine-android:0.8")
+
+    implementation 'com.github.lookfirst:sardine:5.10'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.github.liangjingkanji:Net:3.5.9'
 }

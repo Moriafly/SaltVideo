@@ -31,6 +31,7 @@ class SaltVideoPlayer: StandardGSYVideoPlayer {
 
     var onSetProgressAndTime: (currentTime: Long, totalTime: Long) -> Unit = { _, _ -> }
 
+    var onLongTouchDown: () -> Unit = {}
     var onLongTouchUp: () -> Unit = {}
 
     var onPrepared: () -> Unit = {}
@@ -113,6 +114,7 @@ class SaltVideoPlayer: StandardGSYVideoPlayer {
 
     override fun touchLongPress(e: MotionEvent?) {
         super.touchLongPress(e)
+        onLongTouchDown()
         isLongPressSpeed = true
         speed = 2f
         Log.d(TAG, "touchLongPress(e)")

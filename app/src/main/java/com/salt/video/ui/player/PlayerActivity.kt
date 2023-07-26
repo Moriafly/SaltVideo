@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Lifecycle
 import com.blankj.utilcode.util.BarUtils
+import com.google.android.exoplayer2.Player
 import com.salt.video.App
 import com.salt.video.R
 import com.salt.video.core.PlayerState
@@ -53,12 +54,14 @@ class PlayerActivity : AppCompatActivity() {
 
     private var panelVisibility = false
 
+    private var floatVisibility = false
+
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 HANDLER_MSG_SHOT_PIC -> {
                     if (
-                        (titleAndBottomBarVisibility || panelVisibility)
+                        (titleAndBottomBarVisibility || panelVisibility || floatVisibility)
                         && binding.saltVideoPlayer.currentVideoHeight > 0 && binding.saltVideoPlayer.currentVideoWidth > 0
                     ) {
                         binding.saltVideoPlayer.taskShotPic { bitmap ->
@@ -148,6 +151,10 @@ class PlayerActivity : AppCompatActivity() {
             .setFrameClearDrawable(windowBackground) // Optional
             .setBlurRadius(radius)
 
+        binding.blurViewFloat.setupWith(flShot, RenderScriptBlur(this)) // or RenderEffectBlur
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
+
         val data = intent.data
         Log.d(TAG, "intent.data = $data")
         if (data == null) {
@@ -228,6 +235,10 @@ class PlayerActivity : AppCompatActivity() {
                 )
             }
 
+            composeViewFloat.setContent {
+                PlayerFloatUI()
+            }
+
             // Listener is called immediately after the user exits PiP but before animating.
 //            saltVideoPlayer.addOnLayoutChangeListener { _, left, top, right, bottom,
 //                                                   oldLeft, oldTop, oldRight, oldBottom ->
@@ -289,7 +300,11 @@ class PlayerActivity : AppCompatActivity() {
                         showTitleAndBottomBar()
                     }
                 }
+                onLongTouchDown = {
+                    showFloat()
+                }
                 onLongTouchUp = {
+                    hideFloat()
                     saltVideoPlayer.speed = App.mmkv.decodeFloat(Config.PLAYER_SPEED, 1f)
                 }
 
@@ -357,6 +372,19 @@ class PlayerActivity : AppCompatActivity() {
         binding.blurViewTitleBar.visibility = View.VISIBLE
         binding.blurViewBottomBar.visibility = View.VISIBLE
         titleAndBottomBarVisibility = true
+        handler.sendEmptyMessageDelayed(HANDLER_MSG_HIDE_UI, HANDLER_MSG_HIDE_UI_DELAY)
+        handler.sendEmptyMessage(HANDLER_MSG_SHOT_PIC)
+    }
+
+    private fun hideFloat() {
+        floatVisibility = false
+        binding.cardViewFloat.visibility = View.INVISIBLE
+        handler.removeMessages(HANDLER_MSG_SHOT_PIC)
+    }
+
+    private fun showFloat() {
+        floatVisibility = true
+        binding.cardViewFloat.visibility = View.VISIBLE
         handler.sendEmptyMessageDelayed(HANDLER_MSG_HIDE_UI, HANDLER_MSG_HIDE_UI_DELAY)
         handler.sendEmptyMessage(HANDLER_MSG_SHOT_PIC)
     }

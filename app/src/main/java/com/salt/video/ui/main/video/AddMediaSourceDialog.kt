@@ -45,6 +45,15 @@ fun AddMediaSourceDialog(
                     iconColor = SaltTheme.colors.highlight,
                     text = "本地文件夹"
                 )
+                Item(
+                    onClick = {
+                        // mainActivity.openDocumentTreeLauncher()
+                        onDismissRequest()
+                    },
+                    iconPainter = painterResource(id = R.drawable.ic_cloud),
+                    iconColor = SaltTheme.colors.highlight,
+                    text = "WebDAV 服务器"
+                )
             }
             Spacer(modifier = Modifier.navigationBarsPadding())
         }

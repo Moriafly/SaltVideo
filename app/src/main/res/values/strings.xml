@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Suvine Video</string>
+    <string name="app_name">Salt Video</string>
     <string name="local">Local</string>
     <string name="cloud">Cloud</string>
     <string name="video">Video</string>
