@@ -1,6 +1,6 @@
 # 椒盐视频 SaltVideo
 
-2024 年 3 月 15 日 GPL3 开源
+2024 年 3 月 14 日 GPL3 开源
 
 本地视频播放器，大体设计还是一个多 Activity，部分使用 Jetpack Compose ，播放器为 GSYVideoPlayer
 
